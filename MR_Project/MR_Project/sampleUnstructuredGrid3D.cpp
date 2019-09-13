@@ -84,7 +84,7 @@ int main(int argc,char* argv[])							//Main program
    cout<<"      -r,R:        reset the viewpoint"<<endl;
    cout<<"      -space:      cycle through mesh rendering styles"<<endl;
 
-   const char* filename = (argc<2)? "DATA/scapula.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
+   const char* filename = (argc<2)? "DATA/bunny.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
 
    glutInit(&argc, argv);								//1.  Initialize the GLUT toolkit
    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
