@@ -27,7 +27,7 @@
     <ClCompile Include="sampleUnstructuredGrid3D.cpp" />
     <ClCompile Include="ScalarAttributes.cpp" />
     <ClCompile Include="SimpleRenderer.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="OFFtoPLY.cpp" />
     <ClCompile Include="StructuredGrid.cpp" />
     <ClCompile Include="UniformGrid.cpp" />
     <ClCompile Include="UnstructuredGrid.cpp" />
