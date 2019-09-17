@@ -27,7 +27,7 @@
     <ClCompile Include="sampleUnstructuredGrid3D.cpp" />
     <ClCompile Include="ScalarAttributes.cpp" />
     <ClCompile Include="SimpleRenderer.cpp" />
-    <ClCompile Include="OFFtoPLY.cpp" />
+    <ClCompile Include="OFF_PLYConverter.cpp" />
     <ClCompile Include="StructuredGrid.cpp" />
     <ClCompile Include="UniformGrid.cpp" />
     <ClCompile Include="UnstructuredGrid.cpp" />
@@ -37,6 +37,7 @@
   <ItemGroup>
     <ClInclude Include="Grid.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="OFF_PLYConverter.h" />
     <ClInclude Include="ply.h" />
     <ClInclude Include="PlyReader.h" />
     <ClInclude Include="Point3d.h" />

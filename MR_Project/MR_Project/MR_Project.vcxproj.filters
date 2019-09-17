@@ -54,7 +54,7 @@
     <ClCompile Include="sampleUnstructuredGrid3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OFFtoPLY.cpp">
+    <ClCompile Include="OFF_PLYConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="zpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OFF_PLYConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

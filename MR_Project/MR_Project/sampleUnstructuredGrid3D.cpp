@@ -4,7 +4,7 @@
 #include "MeshRenderer.h"								//a simple renderer for 3D unstructured grids, demonstrating flat/smooth shading
 #include "PlyReader.h"									//a reader that initializes UnstructuredGrid3D objects with meshes stored in the PLY file format
 #include "zpr.h"										//library for interactively manipulating the OpenGL camera (viewpoint) using the mouse
-
+#include "OFF_PLYConverter.h"
 
 float fov	 = 60;										//Perspective projection parameters
 float z_near = -100; 
@@ -84,7 +84,16 @@ int main(int argc,char* argv[])							//Main program
    cout<<"      -r,R:        reset the viewpoint"<<endl;
    cout<<"      -space:      cycle through mesh rendering styles"<<endl;
 
-   const char* filename = (argc<2)? "DATA/bunny.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
+   OFF_PLYConverter *converter = new OFF_PLYConverter();
+   FILE *fo = fopen("DATA/m0.OFF", "r");
+   FILE *fd = fopen("DATA/m0.ply", "w");
+
+   converter->Convert_OFF_PLY(fo, fd);
+
+   fclose(fo);
+   fclose(fd);
+
+   const char* filename = (argc<2)? "DATA/m0.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
 
    glutInit(&argc, argv);								//1.  Initialize the GLUT toolkit
    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
