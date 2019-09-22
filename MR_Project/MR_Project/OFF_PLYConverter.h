@@ -2,6 +2,7 @@
 
 using namespace std;
 
+//Struct representing a point in 3D
 struct Point
 {
 	float x;
@@ -9,6 +10,7 @@ struct Point
 	float z;
 };
 
+//Struct containing the values for a face
 struct Face
 {
 	int type_face;
