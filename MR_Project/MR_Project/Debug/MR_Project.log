@@ -1,2 +1,5 @@
-﻿  sampleUnstructuredGrid3D.cpp
+﻿  OFF_PLYConverter.cpp
+d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(167): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(168): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(169): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   MR_Project.vcxproj -> D:\GitSaves\MR-Project\MR_Project\Debug\MR_Project.exe
