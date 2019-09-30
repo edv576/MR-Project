@@ -118,13 +118,22 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		itPoints = points.begin();
 
+		float ex = 1.0e6;
+
 		//Getting the first values for the minimum and maximum values
-		minX = itPoints->x;
-		minY = itPoints->y;
-		minZ = itPoints->z;
-		maxX = itPoints->x;
-		maxY = itPoints->y;
-		maxZ = itPoints->z;
+		//minX = itPoints->x;
+		//minY = itPoints->y;
+		//minZ = itPoints->z;
+		//maxX = itPoints->x;
+		//maxY = itPoints->y;
+		//maxZ = itPoints->z;
+
+		minX = ex;
+		minY = ex;
+		minZ = ex;
+		maxX = -ex;
+		maxY = -ex;
+		maxZ = -ex;
 
 
 		//Correcting the Centroid and moving every vertex
@@ -137,46 +146,73 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			itPoints->x = itPoints->x + correction.x;
 			itPoints->y = itPoints->y + correction.y;
 			itPoints->z = itPoints->z + correction.z;
-			if (itPoints->x < minX) {
-				minX = itPoints->x;
-			}
-			if (itPoints->y < minY) {
-				minY = itPoints->y;
-			}
-			if (itPoints->z < minZ) {
-				minZ = itPoints->z;
-			}
-			if (itPoints->x > maxX) {
-				maxX = itPoints->x;
-			}
-			if (itPoints->y > maxY) {
-				maxY = itPoints->y;
-			}
-			if (itPoints->z > maxZ) {
-				maxZ = itPoints->z;
-			}
+			
+			minX = min(itPoints->x, minX);
+			minY = min(itPoints->y, minY);
+			minZ = min(itPoints->z, minZ);
+			maxX = max(itPoints->x, maxX);
+			maxY = max(itPoints->y, maxY);
+			maxZ = max(itPoints->z, maxZ);
+
+			//if (itPoints->x < minX) {
+			//	minX = itPoints->x;				
+			//}
+			//if (itPoints->y < minY) {
+			//	minY = itPoints->y;
+			//}
+			//if (itPoints->z < minZ) {
+			//	minZ = itPoints->z;
+			//}
+			//if (itPoints->x > maxX) {
+			//	maxX = itPoints->x;
+			//}
+			//if (itPoints->y > maxY) {
+			//	maxY = itPoints->y;
+			//}
+			//if (itPoints->z > maxZ) {
+			//	maxZ = itPoints->z;
+			//}
 
 			
 		}
 
+		float sizeX = maxX - minX;								//2. Compute a single scaling factor that best fits the grid
+		sizeX = (sizeX) ? 1 / sizeX : 1;							//   in the [-1,1] cube. Using a single factor for x,y, and z
+		float sizeY = maxY - minY;								//   ensures that the object is scaled while keeping its
+		sizeY = (sizeY) ? 1 / sizeY : 1;							//   aspect ratio.
+		float sizeZ = maxZ - minZ;
+		sizeZ = (sizeZ) ? 1 / sizeZ : 1;
+
+		float scale = min(sizeX, min(sizeY, sizeZ));
+
 		//Initializing the extreme points for normalization. Bounding box of length 1.
-		Point extreme1;
-		Point extreme2;
+		//Point extreme1;
+		//Point extreme2;
 
-		extreme1.x = -0.5;
-		extreme1.y = -0.5;
-		extreme1.z = -0.5;
+		//extreme1.x = -0.5;
+		//extreme1.y = -0.5;
+		//extreme1.z = -0.5;
 
-		extreme2.x = 0.5;
-		extreme2.y = 0.5;
-		extreme2.z = 0.5;
+		//extreme2.x = 0.5;
+		//extreme2.y = 0.5;
+		//extreme2.z = 0.5;
 
-		float minT;
-		float scale;
+		
 
-		//Getting the scale
-		minT = std::min(1 / (maxX - minX), 1 / (maxY - minY));
-		scale = std::min(minT, 1 / (maxZ - minZ));
+		//extreme1.x = -ex;
+		//extreme1.y = -ex;
+		//extreme1.z = -ex;
+
+		//extreme2.x = ex;
+		//extreme2.y = ex;
+		//extreme2.z = ex;
+
+		//float minT;
+		//float scale;
+
+		////Getting the scale
+		//minT = std::min(1 / (maxX - minX), 1 / (maxY - minY));
+		//scale = std::min(minT, 1 / (maxZ - minZ));
 
 		for (int i = 0; i < nv; i++)
 		{
@@ -190,9 +226,12 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			//itPoints->z = 2.0*(itPoints->z - minZ) / (maxZ - minZ) - 1.0;
 
 			//Doing the scaling of the mesh. Its done keeping the aspect ratio
-			itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
-			itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
-			itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
+			itPoints->x = 2 * ((itPoints->x - minX)*scale - 0.5);
+			itPoints->y = 2 * ((itPoints->y - minY)*scale - 0.5);
+			itPoints->z = 2 * ((itPoints->z - minZ)*scale - 0.5);
+			//itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
+			//itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
+			//itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
 
 			xt = itPoints->x;
 			yt = itPoints->y;

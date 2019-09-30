@@ -104,7 +104,7 @@ int main(int argc,char* argv[])							//Main program
    
    PlyReader rdr;										//6.  Read a 3D mesh stored in a file in the PLY format
    grid = rdr.read(filename);
-   grid->normalize();									//7.  Normalize the mesh in the [-1,1] cube. This makes setting the OpenGL projection easier.
+   //grid->normalize();									//7.  Normalize the mesh in the [-1,1] cube. This makes setting the OpenGL projection easier.
    grid->computeFaceNormals();							//8.  Compute face and vertex normals for the mesh. This allows us to shade the mesh next.
    grid->computeVertexNormals();
    
