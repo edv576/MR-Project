@@ -5,9 +5,10 @@
 #include <math.h>
 #include <algorithm>
 #include "OFF_PLYConverter.h"
+#include <Eigen/Dense>
 
 
-
+using namespace Eigen;
 
 OFF_PLYConverter::OFF_PLYConverter() {
 
@@ -241,6 +242,85 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			fprintf(fd, "%f %f %f\n", xt, yt, zt);
 
 		}
+
+		Matrix3f covarianceMatrixXYZ;
+
+		float varX, varY, varZ;
+		float covXY, covXZ, covYZ;
+		float meanX, meanY, meanZ;
+		float dummySum1 = 0;
+		float dummySum2 = 0;
+		float dummySum3 = 0;
+
+		meanX = 0;
+		meanY = 0;
+		meanZ = 0;
+
+		for (int i = 0; i < nv; i++)
+		{
+			itPoints = points.begin();
+			std::advance(itPoints, i);
+
+			meanX += itPoints->x;
+			meanY += itPoints->y;
+			meanZ += itPoints->z;
+
+		}
+
+		meanX /= nv;
+		meanY /= nv;
+		meanZ /= nv;
+
+		for (int i = 0; i < nv; i++)
+		{
+			itPoints = points.begin();
+			std::advance(itPoints, i);
+			dummySum1 += (itPoints->x - meanX)*(itPoints->x - meanX);
+			dummySum2 += (itPoints->y - meanY)*(itPoints->y - meanY);
+			dummySum3 += (itPoints->z - meanZ)*(itPoints->z - meanZ);
+
+		}
+
+		varX = dummySum1 / (nv - 1);
+		varY = dummySum2 / (nv - 1);
+		varZ = dummySum3 / (nv - 1);
+
+		dummySum1 = 0;
+		dummySum2 = 0;
+		dummySum3 = 0;
+
+		for (int i = 0; i < nv; i++)
+		{
+			itPoints = points.begin();
+			std::advance(itPoints, i);
+			dummySum1 += (itPoints->x - meanX)*(itPoints->y - meanY);
+			dummySum2 += (itPoints->x - meanX)*(itPoints->z - meanZ);
+			dummySum3 += (itPoints->y - meanY)*(itPoints->z - meanZ);
+		}
+
+		covXY = dummySum1 / (nv - 1);
+		covXZ = dummySum2 / (nv - 1);
+		covYZ = dummySum3 / (nv - 1);
+
+		covarianceMatrixXYZ(0, 0) = varX;
+		covarianceMatrixXYZ(1, 1) = varY;
+		covarianceMatrixXYZ(2, 2) = varZ;
+		covarianceMatrixXYZ(0, 1) = covXY;
+		covarianceMatrixXYZ(1, 0) = covXY;
+		covarianceMatrixXYZ(0, 2) = covXZ;
+		covarianceMatrixXYZ(2, 0) = covXZ;
+		covarianceMatrixXYZ(1, 2) = covYZ;
+		covarianceMatrixXYZ(2, 1) = covYZ;
+
+		EigenSolver<Matrix3f> solver(covarianceMatrixXYZ);
+
+		Vector3cf eigenValues = solver.eigenvalues();
+		Matrix3cf eigenVectors = solver.eigenvectors();
+
+		 
+
+		
+
 
 		for (int i = 0; i < nf; i++)
 		{

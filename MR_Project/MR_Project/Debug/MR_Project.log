@@ -1,5 +1,5 @@
 ﻿  OFF_PLYConverter.cpp
-d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(229): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(230): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(231): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  MR_Project.vcxproj -> D:\GitSaves\MR-Project\MR_Project\Debug\MR_Project.exe
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(230): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(231): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(232): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  MR_Project.vcxproj -> C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\MR_Project.exe
