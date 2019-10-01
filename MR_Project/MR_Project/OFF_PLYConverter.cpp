@@ -20,6 +20,7 @@ OFF_PLYConverter::~OFF_PLYConverter() {
 
 }
 
+
 void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 	char buffer[101];
@@ -177,71 +178,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			
 		}
 
-		float sizeX = maxX - minX;								//2. Compute a single scaling factor that best fits the grid
-		sizeX = (sizeX) ? 1 / sizeX : 1;							//   in the [-1,1] cube. Using a single factor for x,y, and z
-		float sizeY = maxY - minY;								//   ensures that the object is scaled while keeping its
-		sizeY = (sizeY) ? 1 / sizeY : 1;							//   aspect ratio.
-		float sizeZ = maxZ - minZ;
-		sizeZ = (sizeZ) ? 1 / sizeZ : 1;
-
-		float scale = min(sizeX, min(sizeY, sizeZ));
-
-		//Initializing the extreme points for normalization. Bounding box of length 1.
-		//Point extreme1;
-		//Point extreme2;
-
-		//extreme1.x = -0.5;
-		//extreme1.y = -0.5;
-		//extreme1.z = -0.5;
-
-		//extreme2.x = 0.5;
-		//extreme2.y = 0.5;
-		//extreme2.z = 0.5;
-
-		
-
-		//extreme1.x = -ex;
-		//extreme1.y = -ex;
-		//extreme1.z = -ex;
-
-		//extreme2.x = ex;
-		//extreme2.y = ex;
-		//extreme2.z = ex;
-
-		//float minT;
-		//float scale;
-
-		////Getting the scale
-		//minT = std::min(1 / (maxX - minX), 1 / (maxY - minY));
-		//scale = std::min(minT, 1 / (maxZ - minZ));
-
-		for (int i = 0; i < nv; i++)
-		{
-
-			itPoints = points.begin();
-			float xt, yt, zt;
-			std::advance(itPoints, i);
-
-			//itPoints->x = 2.0*(itPoints->x - minX) / (maxX - minX) - 1.0;
-			//itPoints->y = 2.0*(itPoints->y - minY) / (maxY - minY) - 1.0;
-			//itPoints->z = 2.0*(itPoints->z - minZ) / (maxZ - minZ) - 1.0;
-
-			//Doing the scaling of the mesh. Its done keeping the aspect ratio
-			itPoints->x = 2 * ((itPoints->x - minX)*scale - 0.5);
-			itPoints->y = 2 * ((itPoints->y - minY)*scale - 0.5);
-			itPoints->z = 2 * ((itPoints->z - minZ)*scale - 0.5);
-			//itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
-			//itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
-			//itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
-
-			xt = itPoints->x;
-			yt = itPoints->y;
-			zt = itPoints->z;
-
-			//Writing the vertices values in the .ply file
-			fprintf(fd, "%f %f %f\n", xt, yt, zt);
-
-		}
+		//Applying PCA
 
 		Matrix3f covarianceMatrixXYZ;
 
@@ -317,10 +254,127 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		Vector3cf eigenValues = solver.eigenvalues();
 		Matrix3cf eigenVectors = solver.eigenvectors();
 
-		 
+		Vector3f eigen1, eigen2, eigen3;
 
-		
 
+
+		eigen1(0) = eigenVectors(0, 0).real();
+		eigen1(1) = eigenVectors(0, 1).real();
+		eigen1(2) = eigenVectors(0, 2).real();
+		eigen2(0) = eigenVectors(1, 0).real();
+		eigen2(1) = eigenVectors(1, 1).real();
+		eigen2(2) = eigenVectors(1, 2).real();
+		eigen3(0) = eigenVectors(2, 0).real();
+		eigen3(1) = eigenVectors(2, 1).real();
+		eigen3(2) = eigenVectors(2, 2).real();
+
+		Vector3i indexes;
+		Vector3f norms;
+		int indexTemp;
+		float normTemp;
+
+		indexes(0) = 0;
+		indexes(1) = 1;
+		indexes(2) = 2;
+		norms(0) = eigen1.norm();
+		norms(1) = eigen2.norm();
+		norms(2) = eigen3.norm();
+
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = i+1; j < 3; j++)
+			{
+				if (norms(j) > norms(i)) {
+					normTemp = norms(i);
+					norms(i) = norms(j);
+					norms(j) = normTemp;
+					indexTemp = indexes(i);
+					indexes(i) = indexes(j);
+					indexes(j) = indexTemp;
+				}
+			}
+		}
+
+		Vector3f xAxis, yAxis;
+
+		xAxis(0) = eigenVectors(indexes(0), 0).real();
+		xAxis(1) = eigenVectors(indexes(0), 1).real();
+		xAxis(2) = eigenVectors(indexes(0), 2).real();
+
+		yAxis(0) = eigenVectors(indexes(1), 0).real();
+		yAxis(1) = eigenVectors(indexes(1), 1).real();
+		yAxis(2) = eigenVectors(indexes(1), 2).real();
+
+
+
+
+		//Normalizing to size 1
+
+		float sizeX = maxX - minX;								//2. Compute a single scaling factor that best fits the grid
+		sizeX = (sizeX) ? 1 / sizeX : 1;							//   in the [-1,1] cube. Using a single factor for x,y, and z
+		float sizeY = maxY - minY;								//   ensures that the object is scaled while keeping its
+		sizeY = (sizeY) ? 1 / sizeY : 1;							//   aspect ratio.
+		float sizeZ = maxZ - minZ;
+		sizeZ = (sizeZ) ? 1 / sizeZ : 1;
+
+		float scale = min(sizeX, min(sizeY, sizeZ));
+
+		//Initializing the extreme points for normalization. Bounding box of length 1.
+		//Point extreme1;
+		//Point extreme2;
+
+		//extreme1.x = -0.5;
+		//extreme1.y = -0.5;
+		//extreme1.z = -0.5;
+
+		//extreme2.x = 0.5;
+		//extreme2.y = 0.5;
+		//extreme2.z = 0.5;
+
+
+
+		//extreme1.x = -ex;
+		//extreme1.y = -ex;
+		//extreme1.z = -ex;
+
+		//extreme2.x = ex;
+		//extreme2.y = ex;
+		//extreme2.z = ex;
+
+		//float minT;
+		//float scale;
+
+		////Getting the scale
+		//minT = std::min(1 / (maxX - minX), 1 / (maxY - minY));
+		//scale = std::min(minT, 1 / (maxZ - minZ));
+
+		for (int i = 0; i < nv; i++)
+		{
+
+			itPoints = points.begin();
+			float xt, yt, zt;
+			std::advance(itPoints, i);
+
+			//itPoints->x = 2.0*(itPoints->x - minX) / (maxX - minX) - 1.0;
+			//itPoints->y = 2.0*(itPoints->y - minY) / (maxY - minY) - 1.0;
+			//itPoints->z = 2.0*(itPoints->z - minZ) / (maxZ - minZ) - 1.0;
+
+			//Doing the scaling of the mesh. Its done keeping the aspect ratio
+			itPoints->x = 2 * ((itPoints->x - minX)*scale - 0.5);
+			itPoints->y = 2 * ((itPoints->y - minY)*scale - 0.5);
+			itPoints->z = 2 * ((itPoints->z - minZ)*scale - 0.5);
+			//itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
+			//itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
+			//itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
+
+			xt = itPoints->x;
+			yt = itPoints->y;
+			zt = itPoints->z;
+
+			//Writing the vertices values in the .ply file
+			fprintf(fd, "%f %f %f\n", xt, yt, zt);
+
+		}
 
 		for (int i = 0; i < nf; i++)
 		{
