@@ -85,15 +85,15 @@ int main(int argc,char* argv[])							//Main program
    cout<<"      -space:      cycle through mesh rendering styles"<<endl;
 
    OFF_PLYConverter *converter = new OFF_PLYConverter();
-   FILE *fo = fopen("DATA/m1005.OFF", "r");
-   FILE *fd = fopen("DATA/m1005.ply", "w");
+   FILE *fo = fopen("DATA/m0.OFF", "r");
+   FILE *fd = fopen("DATA/m0.ply", "w");
 
    converter->Convert_OFF_PLY(fo, fd);
 
    fclose(fo);
    fclose(fd);
 
-   const char* filename = (argc<2)? "DATA/m1005.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
+   const char* filename = (argc<2)? "DATA/m0.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
 
    glutInit(&argc, argv);								//1.  Initialize the GLUT toolkit
    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);

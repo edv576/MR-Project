@@ -27,6 +27,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 	std::list<Point> points;
 	std::list<Face> faces;
 	MatrixXf allPoints(2, 2);
+	MatrixXi allFaces(2, 2);
 
 
 
@@ -66,6 +67,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		fscanf(fo, "%d %d %d", &nv, &nf, &ne);
 
 		allPoints.resize(nv, 3);
+		allFaces.resize(nf, 4);
 
 		for (int i = 0; i < nv; i++)
 		{
@@ -76,15 +78,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			allPoints(i, 1) = y;
 			allPoints(i, 2) = z;
 
-			point.x = x;
-			point.y = y;
-			point.z = z;
-			//Adding all vertices to a list
-			points.push_back(point);
-			//Adding the values of a point to the Centroid
-			centroid.x += point.x;
-			centroid.y += point.y;
-			centroid.z += point.z;			
+			centroid.x += x;
+			centroid.y += y;
+			centroid.z += z;			
 		}
 
 		std::list<Point>::iterator itPoints = points.begin();
@@ -93,12 +89,11 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		{
 			Face face;
 			fscanf(fo, "%d %d %d %d", &tf, &p1, &p2, &p3);
-			face.type_face = tf;
-			face.point1 = p1;
-			face.point2 = p2;
-			face.point3 = p3;
-			//Adding the values of the faces to a list
-			faces.push_back(face);			
+			allFaces(i, 0) = tf;
+			allFaces(i, 1) = p1;
+			allFaces(i, 2) = p2;
+			allFaces(i, 3) = p3;
+	
 		}
 
 		std::list<Face>::iterator itFaces = faces.begin();
@@ -152,37 +147,16 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		for (int i = 0; i < nv; i++)
 		{
 
-			itPoints = points.begin();
-			std::advance(itPoints, i);
-			itPoints->x = itPoints->x + correction.x;
-			itPoints->y = itPoints->y + correction.y;
-			itPoints->z = itPoints->z + correction.z;
+			allPoints(i, 0) += correction.x;
+			allPoints(i, 1) += correction.y;
+			allPoints(i, 2) += correction.z;
 			
-			minX = min(itPoints->x, minX);
-			minY = min(itPoints->y, minY);
-			minZ = min(itPoints->z, minZ);
-			maxX = max(itPoints->x, maxX);
-			maxY = max(itPoints->y, maxY);
-			maxZ = max(itPoints->z, maxZ);
-
-			//if (itPoints->x < minX) {
-			//	minX = itPoints->x;				
-			//}
-			//if (itPoints->y < minY) {
-			//	minY = itPoints->y;
-			//}
-			//if (itPoints->z < minZ) {
-			//	minZ = itPoints->z;
-			//}
-			//if (itPoints->x > maxX) {
-			//	maxX = itPoints->x;
-			//}
-			//if (itPoints->y > maxY) {
-			//	maxY = itPoints->y;
-			//}
-			//if (itPoints->z > maxZ) {
-			//	maxZ = itPoints->z;
-			//}
+			minX = min(allPoints(i, 0), minX);
+			minY = min(allPoints(i, 1), minY);
+			minZ = min(allPoints(i, 2), minZ);
+			maxX = max(allPoints(i, 0), maxX);
+			maxY = max(allPoints(i, 1), maxY);
+			maxZ = max(allPoints(i, 2), maxZ);
 
 			
 		}
@@ -204,12 +178,10 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < nv; i++)
 		{
-			itPoints = points.begin();
-			std::advance(itPoints, i);
+			meanX += allPoints(i, 0);
+			meanY += allPoints(i, 1);
+			meanZ += allPoints(i, 2);
 
-			meanX += itPoints->x;
-			meanY += itPoints->y;
-			meanZ += itPoints->z;
 
 		}
 
@@ -219,11 +191,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < nv; i++)
 		{
-			itPoints = points.begin();
-			std::advance(itPoints, i);
-			dummySum1 += (itPoints->x - meanX)*(itPoints->x - meanX);
-			dummySum2 += (itPoints->y - meanY)*(itPoints->y - meanY);
-			dummySum3 += (itPoints->z - meanZ)*(itPoints->z - meanZ);
+			dummySum1 += (allPoints(i, 0) - meanX)*(allPoints(i, 0) - meanX);
+			dummySum2 += (allPoints(i, 1) - meanY)*(allPoints(i, 1) - meanY);
+			dummySum3 += (allPoints(i, 2) - meanZ)*(allPoints(i, 2) - meanZ);
 
 		}
 
@@ -237,11 +207,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < nv; i++)
 		{
-			itPoints = points.begin();
-			std::advance(itPoints, i);
-			dummySum1 += (itPoints->x - meanX)*(itPoints->y - meanY);
-			dummySum2 += (itPoints->x - meanX)*(itPoints->z - meanZ);
-			dummySum3 += (itPoints->y - meanY)*(itPoints->z - meanZ);
+			dummySum1 += (allPoints(i, 0) - meanX)*(allPoints(i, 1) - meanY);
+			dummySum2 += (allPoints(i, 0) - meanX)*(allPoints(i, 2) - meanZ);
+			dummySum3 += (allPoints(i, 1) - meanY)*(allPoints(i, 2) - meanZ);
 		}
 
 		covXY = dummySum1 / (nv - 1);
@@ -262,20 +230,6 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		Vector3cf eigenValues = solver.eigenvalues();
 		Matrix3cf eigenVectors = solver.eigenvectors();
-
-		Vector3f eigen1, eigen2, eigen3;
-
-
-
-		eigen1(0) = eigenVectors(0, 0).real();
-		eigen1(1) = eigenVectors(0, 1).real();
-		eigen1(2) = eigenVectors(0, 2).real();
-		eigen2(0) = eigenVectors(1, 0).real();
-		eigen2(1) = eigenVectors(1, 1).real();
-		eigen2(2) = eigenVectors(1, 2).real();
-		eigen3(0) = eigenVectors(2, 0).real();
-		eigen3(1) = eigenVectors(2, 1).real();
-		eigen3(2) = eigenVectors(2, 2).real();
 
 		Vector3i indexes;
 		Vector3f eValues;
@@ -320,19 +274,49 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < nv; i++)
 		{
-			itPoints = points.begin();
-			std::advance(itPoints, i);
-
 			Vector3f tempVec;
-			tempVec(0) = itPoints->x;
-			tempVec(1) = itPoints->y;
-			tempVec(2) = itPoints->z;
 
-			itPoints->x = xAxis.dot(tempVec);
-			itPoints->y = yAxis.dot(tempVec);
-			itPoints->z = zAxis.dot(tempVec);
+			tempVec(0) = allPoints(i, 0);
+			tempVec(1) = allPoints(i, 1);
+			tempVec(2) = allPoints(i, 2);
+
+			allPoints(i, 0) = xAxis.dot(tempVec);
+			allPoints(i, 1) = yAxis.dot(tempVec);
+			allPoints(i, 2) = zAxis.dot(tempVec);
 		}
 
+
+
+
+		float fX, fY, fZ;
+		fX = 0;
+		fY = 0;
+		fZ = 0;
+
+		for (int i = 0; i < nf; i++)
+		{
+			Vector3f triangleCenter;
+			triangleCenter(0) = (allPoints(allFaces(i, 1), 0) + allPoints(allFaces(i, 2), 0) + allPoints(allFaces(i, 3), 0))/3;
+			triangleCenter(1) = (allPoints(allFaces(i, 1), 1) + allPoints(allFaces(i, 2), 1) + allPoints(allFaces(i, 3), 1))/3;
+			triangleCenter(2) = (allPoints(allFaces(i, 1), 2) + allPoints(allFaces(i, 2), 2) + allPoints(allFaces(i, 3), 2))/3;
+
+			fX += (triangleCenter(0) / abs(triangleCenter(0)))*pow(triangleCenter(0), 2);
+			fY += (triangleCenter(1) / abs(triangleCenter(1)))*pow(triangleCenter(1), 2);
+			fZ += (triangleCenter(2) / abs(triangleCenter(2)))*pow(triangleCenter(2), 2);
+
+		}
+
+		float sign_fX, sign_fY, sign_FZ;
+		sign_fX = fX / abs(fX);
+		sign_fY = fY / abs(fY);
+		sign_FZ = fZ / abs(fZ);
+
+		for (int i = 0; i < nv; i++)
+		{
+			allPoints(i, 0) *= sign_fX;
+			allPoints(i, 1) *= sign_fY;
+			allPoints(i, 2) *= sign_FZ;
+		}
 
 		//Normalizing to size 1
 
@@ -377,25 +361,36 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		for (int i = 0; i < nv; i++)
 		{
 
-			itPoints = points.begin();
+			//itPoints = points.begin();
 			float xt, yt, zt;
-			std::advance(itPoints, i);
+			//std::advance(itPoints, i);
 
-			//itPoints->x = 2.0*(itPoints->x - minX) / (maxX - minX) - 1.0;
-			//itPoints->y = 2.0*(itPoints->y - minY) / (maxY - minY) - 1.0;
-			//itPoints->z = 2.0*(itPoints->z - minZ) / (maxZ - minZ) - 1.0;
+			////itPoints->x = 2.0*(itPoints->x - minX) / (maxX - minX) - 1.0;
+			////itPoints->y = 2.0*(itPoints->y - minY) / (maxY - minY) - 1.0;
+			////itPoints->z = 2.0*(itPoints->z - minZ) / (maxZ - minZ) - 1.0;
 
-			//Doing the scaling of the mesh. Its done keeping the aspect ratio
-			itPoints->x = 2 * ((itPoints->x - minX)*scale - 0.5);
-			itPoints->y = 2 * ((itPoints->y - minY)*scale - 0.5);
-			itPoints->z = 2 * ((itPoints->z - minZ)*scale - 0.5);
+			////Doing the scaling of the mesh. Its done keeping the aspect ratio
+			//itPoints->x = 2 * ((itPoints->x - minX)*scale - 0.5);
+			//itPoints->y = 2 * ((itPoints->y - minY)*scale - 0.5);
+			//itPoints->z = 2 * ((itPoints->z - minZ)*scale - 0.5);
+			////itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
+			////itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
+			////itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
+
+			xt = allPoints(i, 0);
+			yt = allPoints(i, 1);
+			zt = allPoints(i, 2);
+
+			allPoints(i, 0) = 2 * ((allPoints(i, 0) - minX)*scale - 0.5);
+			allPoints(i, 1) = 2 * ((allPoints(i, 1) - minY)*scale - 0.5);
+			allPoints(i, 2) = 2 * ((allPoints(i, 2) - minZ)*scale - 0.5);
 			//itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
 			//itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
 			//itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
 
-			xt = itPoints->x;
-			yt = itPoints->y;
-			zt = itPoints->z;
+			xt = allPoints(i, 0);
+			yt = allPoints(i, 1);
+			zt = allPoints(i, 2);
 
 			//Writing the vertices values in the .ply file
 			fprintf(fd, "%f %f %f\n", xt, yt, zt);
@@ -404,13 +399,12 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < nf; i++)
 		{
-			itFaces = faces.begin();
 			int type_face_t, point1_t, point2_t, point3_t;
-			std::advance(itFaces, i);
-			type_face_t = itFaces->type_face;
-			point1_t = itFaces->point1;
-			point2_t = itFaces->point2;
-			point3_t = itFaces->point3;
+
+			type_face_t = allFaces(i, 0);
+			point1_t = allFaces(i, 1);
+			point2_t = allFaces(i, 2);
+			point3_t = allFaces(i, 3);
 			//Writing the faces values in the .ply file
 			fprintf(fd, "%d %d %d %d\n", type_face_t, point1_t, point2_t, point3_t);
 		}
