@@ -26,6 +26,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 	char buffer[101];
 	std::list<Point> points;
 	std::list<Face> faces;
+	MatrixXf allPoints(2, 2);
+
+
 
 	//Scan first line - type of file
 	fscanf(fo, "%100s\n", buffer);
@@ -62,11 +65,17 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		//Scan number of vertex, faces and edges
 		fscanf(fo, "%d %d %d", &nv, &nf, &ne);
 
+		allPoints.resize(nv, 3);
 
 		for (int i = 0; i < nv; i++)
 		{
 			Point point;
 			fscanf(fo, "%f %f %f", &x, &y, &z);
+
+			allPoints(i, 0) = x;
+			allPoints(i, 1) = y;
+			allPoints(i, 2) = z;
+
 			point.x = x;
 			point.y = y;
 			point.z = z;
@@ -269,25 +278,25 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		eigen3(2) = eigenVectors(2, 2).real();
 
 		Vector3i indexes;
-		Vector3f norms;
+		Vector3f eValues;
 		int indexTemp;
-		float normTemp;
+		float eValueTemp;
 
 		indexes(0) = 0;
 		indexes(1) = 1;
 		indexes(2) = 2;
-		norms(0) = eigen1.norm();
-		norms(1) = eigen2.norm();
-		norms(2) = eigen3.norm();
+		eValues(0) = eigenValues(0).real();
+		eValues(1) = eigenValues(1).real();
+		eValues(2) = eigenValues(2).real();
 
 		for (int i = 0; i < 2; i++)
 		{
 			for (int j = i+1; j < 3; j++)
 			{
-				if (norms(j) > norms(i)) {
-					normTemp = norms(i);
-					norms(i) = norms(j);
-					norms(j) = normTemp;
+				if (eValues(j) > eValues(i)) {
+					eValueTemp = eValues(i);
+					eValues(i) = eValues(j);
+					eValues(j) = eValueTemp;
 					indexTemp = indexes(i);
 					indexes(i) = indexes(j);
 					indexes(j) = indexTemp;
@@ -295,7 +304,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			}
 		}
 
-		Vector3f xAxis, yAxis;
+		Vector3f xAxis, yAxis, zAxis;
 
 		xAxis(0) = eigenVectors(indexes(0), 0).real();
 		xAxis(1) = eigenVectors(indexes(0), 1).real();
@@ -305,7 +314,24 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		yAxis(1) = eigenVectors(indexes(1), 1).real();
 		yAxis(2) = eigenVectors(indexes(1), 2).real();
 
+		zAxis(0) = eigenVectors(indexes(2), 0).real();
+		zAxis(1) = eigenVectors(indexes(2), 1).real();
+		zAxis(2) = eigenVectors(indexes(2), 2).real();
 
+		for (int i = 0; i < nv; i++)
+		{
+			itPoints = points.begin();
+			std::advance(itPoints, i);
+
+			Vector3f tempVec;
+			tempVec(0) = itPoints->x;
+			tempVec(1) = itPoints->y;
+			tempVec(2) = itPoints->z;
+
+			itPoints->x = xAxis.dot(tempVec);
+			itPoints->y = yAxis.dot(tempVec);
+			itPoints->z = zAxis.dot(tempVec);
+		}
 
 
 		//Normalizing to size 1
