@@ -6,6 +6,10 @@
 #include <algorithm>
 #include "OFF_PLYConverter.h"
 #include <Eigen/Dense>
+#include <vector>
+#include <random>
+#include <chrono>
+#include <cassert>
 
 
 using namespace Eigen;
@@ -28,6 +32,121 @@ float OFF_PLYConverter::DistanceBetweenPoints(Point p1, Point p2) {
 
 	return distance;
 }
+
+template <typename T>
+MatrixXi Combination(const std::vector<T>& v, std::size_t count)
+{
+	assert(count <= v.size());
+	std::vector<bool> bitset(v.size() - count, 0);
+	bitset.resize(v.size(), 1);
+
+	do {
+		int vertices = 0;
+		for (std::size_t i = 0; i != v.size(); ++i) {
+			if (bitset[i]) {
+				
+				
+				std::cout << v[i] << " ";
+			}
+		}
+		std::cout << std::endl;
+	} while (std::next_permutation(bitset.begin(), bitset.end()));
+
+	MatrixXi response;
+
+	return response;
+}
+
+
+
+
+VectorXi OFF_PLYConverter::GetRandomIndexes(int size) {
+
+	VectorXi randomIndexes(size);
+	std::vector<int> numbers;
+
+	for (int i = 0; i < allPoints.rows(); i++)      
+		numbers.push_back(i);
+
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::shuffle(numbers.begin(), numbers.end(), std::default_random_engine(seed));
+
+	for (int i = 0; i < size; i++) {
+		randomIndexes(i) = numbers[i];
+	}
+
+	return randomIndexes;
+
+
+}
+
+VectorXi OFF_PLYConverter::GetFeatureVector(VectorXf samples, int numberBins, float minValue, float maxValue) {
+
+	float binInterval = (maxValue - minValue)/numberBins;
+
+	VectorXi featureVector(numberBins);
+	featureVector.setZero();
+
+	for (int i = 0; i < samples.size(); i++) {
+		for (int j = 0; j < numberBins; j++) {
+			if ((samples(i) > j*binInterval) && (samples(i) <= (j + 1)*binInterval)) {
+				featureVector(j)++;
+			}
+		}
+	}
+
+	return featureVector;
+
+
+}
+
+VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int numberBins) {
+
+	float maxDistance;
+	Point dummyPoint;
+	VectorXi randomIndexes;
+	VectorXf sampleDistances(2);
+
+	randomIndexes = GetRandomIndexes(sampleSize);
+
+	dummyPoint.x = allPoints(randomIndexes(0), 0);
+	dummyPoint.y = allPoints(randomIndexes(0), 1);
+	dummyPoint.z = allPoints(randomIndexes(0), 2);
+
+	maxDistance = DistanceBetweenPoints(centroid, dummyPoint);
+
+
+	sampleDistances.resize(sampleSize);
+	VectorXi featureVector;
+
+	
+
+	for (int i = 0; i < randomIndexes.size(); i++)
+	{
+		dummyPoint.x = allPoints(randomIndexes(i), 0);
+		dummyPoint.y = allPoints(randomIndexes(i), 1);
+		dummyPoint.z = allPoints(randomIndexes(i), 2);
+
+		sampleDistances(i) = DistanceBetweenPoints(centroid, dummyPoint);
+
+		if (sampleDistances(i) > maxDistance) {
+			maxDistance = sampleDistances(i);
+		}
+	
+	}
+
+	featureVector = GetFeatureVector(sampleDistances, 10, 0, maxDistance);
+
+	
+
+	return featureVector;
+}
+
+//VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int numberBins)
+//{
+//
+//
+//}
 
 float OFF_PLYConverter::CalculateDiameter()
 {
@@ -94,7 +213,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 	//Temporal values for type of faces a points of a face
 	int tf, p1, p2, p3;
 	//Point to store the centroid (barycenter)
-	Point centroid;
+	//Point centroid;
 	//Initializing the centroid in (0, 0, 0)
 	centroid.x = 0;
 	centroid.y = 0;
@@ -458,6 +577,11 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			//Writing the faces values in the .ply file
 			fprintf(fd, "%d %d %d %d\n", type_face_t, point1_t, point2_t, point3_t);
 		}
+
+		VectorXi hist_Bary_RandVert;
+		hist_Bary_RandVert = CalculateHistogram_Bary_RandVert(200, 10);
+
+		//CalculateHistogram_Bary_RandVert(200, 10);
 
 		float maxDistance = CalculateDiameter();
 
