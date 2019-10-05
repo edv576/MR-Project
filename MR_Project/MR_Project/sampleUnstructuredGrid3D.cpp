@@ -108,6 +108,8 @@ int main(int argc, char* argv[])							//Main program
 						//if it is a mesh
 						if (file.path().extension().string() == ".off") {
 							//parse the file
+							FILE* plyf = fopen()
+							new OFF_PLYConverter()->Convert_OFF_PLY(fopen(file.path().string().c_str, "R"))
 
 							//write the data to the csv
 
