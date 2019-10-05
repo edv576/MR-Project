@@ -2,6 +2,7 @@
 
 using namespace std;
 
+
 //Struct representing a point in 3D
 struct Point
 {
@@ -25,6 +26,6 @@ public:
 	OFF_PLYConverter();
 	~OFF_PLYConverter();
 
-	void Convert_OFF_PLY(FILE *fo, FILE *fd);
+	void Convert_OFF_PLY(FILE* fo, FILE* fd);
 
 };

@@ -21,13 +21,13 @@ OFF_PLYConverter::~OFF_PLYConverter() {
 }
 
 
-void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
+void OFF_PLYConverter::Convert_OFF_PLY(FILE* fo, FILE* fd) {
 
 	char buffer[101];
 	std::list<Point> points;
 	std::list<Face> faces;
-	MatrixXf allPoints(2, 2);
-	MatrixXi allFaces(2, 2);
+	MatrixXf allPoints(2, 3);
+	MatrixXi allFaces(2, 4);
 
 
 
@@ -62,7 +62,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 	}
 	else
 	{
-	
+
 		//Scan number of vertex, faces and edges
 		fscanf(fo, "%d %d %d", &nv, &nf, &ne);
 
@@ -80,7 +80,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 			centroid.x += x;
 			centroid.y += y;
-			centroid.z += z;			
+			centroid.z += z;
 		}
 
 		std::list<Point>::iterator itPoints = points.begin();
@@ -93,7 +93,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			allFaces(i, 1) = p1;
 			allFaces(i, 2) = p2;
 			allFaces(i, 3) = p3;
-	
+
 		}
 
 		std::list<Face>::iterator itFaces = faces.begin();
@@ -150,7 +150,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			allPoints(i, 0) += correction.x;
 			allPoints(i, 1) += correction.y;
 			allPoints(i, 2) += correction.z;
-			
+
 			minX = min(allPoints(i, 0), minX);
 			minY = min(allPoints(i, 1), minY);
 			minZ = min(allPoints(i, 2), minZ);
@@ -158,7 +158,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			maxY = max(allPoints(i, 1), maxY);
 			maxZ = max(allPoints(i, 2), maxZ);
 
-			
+
 		}
 
 		//Applying PCA
@@ -191,9 +191,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < nv; i++)
 		{
-			dummySum1 += (allPoints(i, 0) - meanX)*(allPoints(i, 0) - meanX);
-			dummySum2 += (allPoints(i, 1) - meanY)*(allPoints(i, 1) - meanY);
-			dummySum3 += (allPoints(i, 2) - meanZ)*(allPoints(i, 2) - meanZ);
+			dummySum1 += (allPoints(i, 0) - meanX) * (allPoints(i, 0) - meanX);
+			dummySum2 += (allPoints(i, 1) - meanY) * (allPoints(i, 1) - meanY);
+			dummySum3 += (allPoints(i, 2) - meanZ) * (allPoints(i, 2) - meanZ);
 
 		}
 
@@ -207,9 +207,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < nv; i++)
 		{
-			dummySum1 += (allPoints(i, 0) - meanX)*(allPoints(i, 1) - meanY);
-			dummySum2 += (allPoints(i, 0) - meanX)*(allPoints(i, 2) - meanZ);
-			dummySum3 += (allPoints(i, 1) - meanY)*(allPoints(i, 2) - meanZ);
+			dummySum1 += (allPoints(i, 0) - meanX) * (allPoints(i, 1) - meanY);
+			dummySum2 += (allPoints(i, 0) - meanX) * (allPoints(i, 2) - meanZ);
+			dummySum3 += (allPoints(i, 1) - meanY) * (allPoints(i, 2) - meanZ);
 		}
 
 		covXY = dummySum1 / (nv - 1);
@@ -245,7 +245,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		for (int i = 0; i < 2; i++)
 		{
-			for (int j = i+1; j < 3; j++)
+			for (int j = i + 1; j < 3; j++)
 			{
 				if (eValues(j) > eValues(i)) {
 					eValueTemp = eValues(i);
@@ -296,13 +296,13 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		for (int i = 0; i < nf; i++)
 		{
 			Vector3f triangleCenter;
-			triangleCenter(0) = (allPoints(allFaces(i, 1), 0) + allPoints(allFaces(i, 2), 0) + allPoints(allFaces(i, 3), 0))/3;
-			triangleCenter(1) = (allPoints(allFaces(i, 1), 1) + allPoints(allFaces(i, 2), 1) + allPoints(allFaces(i, 3), 1))/3;
-			triangleCenter(2) = (allPoints(allFaces(i, 1), 2) + allPoints(allFaces(i, 2), 2) + allPoints(allFaces(i, 3), 2))/3;
+			triangleCenter(0) = (allPoints(allFaces(i, 1), 0) + allPoints(allFaces(i, 2), 0) + allPoints(allFaces(i, 3), 0)) / 3;
+			triangleCenter(1) = (allPoints(allFaces(i, 1), 1) + allPoints(allFaces(i, 2), 1) + allPoints(allFaces(i, 3), 1)) / 3;
+			triangleCenter(2) = (allPoints(allFaces(i, 1), 2) + allPoints(allFaces(i, 2), 2) + allPoints(allFaces(i, 3), 2)) / 3;
 
-			fX += (triangleCenter(0) / abs(triangleCenter(0)))*pow(triangleCenter(0), 2);
-			fY += (triangleCenter(1) / abs(triangleCenter(1)))*pow(triangleCenter(1), 2);
-			fZ += (triangleCenter(2) / abs(triangleCenter(2)))*pow(triangleCenter(2), 2);
+			fX += (triangleCenter(0) / abs(triangleCenter(0))) * pow(triangleCenter(0), 2);
+			fY += (triangleCenter(1) / abs(triangleCenter(1))) * pow(triangleCenter(1), 2);
+			fZ += (triangleCenter(2) / abs(triangleCenter(2))) * pow(triangleCenter(2), 2);
 
 		}
 
@@ -381,9 +381,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			yt = allPoints(i, 1);
 			zt = allPoints(i, 2);
 
-			allPoints(i, 0) = 2 * ((allPoints(i, 0) - minX)*scale - 0.5);
-			allPoints(i, 1) = 2 * ((allPoints(i, 1) - minY)*scale - 0.5);
-			allPoints(i, 2) = 2 * ((allPoints(i, 2) - minZ)*scale - 0.5);
+			allPoints(i, 0) = 2 * ((allPoints(i, 0) - minX) * scale - 0.5);
+			allPoints(i, 1) = 2 * ((allPoints(i, 1) - minY) * scale - 0.5);
+			allPoints(i, 2) = 2 * ((allPoints(i, 2) - minZ) * scale - 0.5);
 			//itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
 			//itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
 			//itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
@@ -409,8 +409,34 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			fprintf(fd, "%d %d %d %d\n", type_face_t, point1_t, point2_t, point3_t);
 		}
 
-		
+
 
 	}
 
+}
+
+float AngleBetween(Vector3f ab, Vector3f ac) {
+	return std::acos(ab.normalized().dot(ac.normalized()));
+}
+
+float SurfaceArea(MatrixXf* faces, MatrixXf* vertices) {
+
+	//total area
+	float area = 0.0f;
+
+	for (int i = 0; i < faces->rows(); i++)
+	{
+		Vector4f face = faces->row(i);
+
+		//get the vertices of the face (triangle)
+		Vector3f a = vertices->row(face[1]);
+		Vector3f b = vertices->row(face[2]);
+		Vector3f c = vertices->row(face[3]);
+
+		//https://math.stackexchange.com/questions/128991/how-to-calculate-the-area-of-a-3d-triangle
+		//area of a triangle = cross(ab,ac).norm() / 2
+		area += (a - b).cross(a - c).norm() / 2;
+	}
+
+	return area;
 }

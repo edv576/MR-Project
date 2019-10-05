@@ -39,3 +39,5 @@ Assets/FMODStudioCache.asset
 Assets/StreamingAssets/*.bank
 fmod.log
 fmod_editor.log
+/MR_Project/MR_Project/DATA/PSB
+/MR_Project/MR_Project/freeglut.dll
