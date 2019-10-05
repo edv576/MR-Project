@@ -1,6 +1,8 @@
 #pragma once
+#include <Eigen/Dense>
 
 using namespace std;
+using namespace Eigen;
 
 //Struct representing a point in 3D
 struct Point
@@ -21,10 +23,18 @@ struct Face
 
 class OFF_PLYConverter {
 
+private:
+	MatrixXf allPoints;
+	MatrixXi allFaces;
+
 public:
 	OFF_PLYConverter();
 	~OFF_PLYConverter();
 
 	void Convert_OFF_PLY(FILE *fo, FILE *fd);
+	float CalculateDiameter();
+	float DistanceBetweenPoints(Point p1, Point p2);
+
+
 
 };

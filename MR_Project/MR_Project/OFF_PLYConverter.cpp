@@ -20,14 +20,64 @@ OFF_PLYConverter::~OFF_PLYConverter() {
 
 }
 
+float OFF_PLYConverter::DistanceBetweenPoints(Point p1, Point p2) {
+
+	float distance = sqrtf(pow(p2.x - p1.x, 2) +
+		pow(p2.y - p1.y, 2) +
+		pow(p2.z - p1.z, 2));
+
+	return distance;
+}
+
+float OFF_PLYConverter::CalculateDiameter()
+{
+	Point dummyPoint1;
+	Point dummyPoint2;
+
+	dummyPoint1.x = allPoints(0, 0);
+	dummyPoint1.y = allPoints(0, 1);
+	dummyPoint1.z = allPoints(0, 2);
+
+	dummyPoint2.x = allPoints(1, 0);
+	dummyPoint2.y = allPoints(1, 1);
+	dummyPoint2.z = allPoints(1, 2);
+
+	float maxDistance = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
+	float tempDistance;
+
+	for (int i = 0; i < allPoints.rows() - 1; i++)
+	{
+		for (int j = i+1; j < allPoints.rows(); j++)
+		{
+			dummyPoint1.x = allPoints(i, 0);
+			dummyPoint1.y = allPoints(i, 1);
+			dummyPoint1.z = allPoints(i, 2);
+
+			dummyPoint2.x = allPoints(j, 0);
+			dummyPoint2.y = allPoints(j, 1);
+			dummyPoint2.z = allPoints(j, 2);
+
+			tempDistance = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
+
+			if (tempDistance > maxDistance) {
+				maxDistance = tempDistance;
+			}
+		}
+	}
+	return maxDistance;
+}
+
+
+
+
 
 void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 	char buffer[101];
-	std::list<Point> points;
-	std::list<Face> faces;
-	MatrixXf allPoints(2, 2);
-	MatrixXi allFaces(2, 2);
+	/*std::list<Point> points;
+	std::list<Face> faces;*/
+	//MatrixXf allPoints(2, 2);
+	//MatrixXi allFaces(2, 2);
 
 
 
@@ -83,7 +133,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			centroid.z += z;			
 		}
 
-		std::list<Point>::iterator itPoints = points.begin();
+		//std::list<Point>::iterator itPoints = points.begin();
 
 		for (int i = 0; i < nf; i++)
 		{
@@ -96,7 +146,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 	
 		}
 
-		std::list<Face>::iterator itFaces = faces.begin();
+		//std::list<Face>::iterator itFaces = faces.begin();
 
 		//Calculating the actual Centroid
 		centroid.x /= nv;
@@ -122,7 +172,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		fprintf(fd, "end_header\n");
 
 
-		itPoints = points.begin();
+		//itPoints = points.begin();
 
 		float ex = 1.0e6;
 
@@ -409,8 +459,18 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			fprintf(fd, "%d %d %d %d\n", type_face_t, point1_t, point2_t, point3_t);
 		}
 
-		
+		float maxDistance = CalculateDiameter();
+
+		int t = 0;
 
 	}
 
+	
+
+
+	
+	
+
 }
+
+
