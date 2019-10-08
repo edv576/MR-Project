@@ -1,62 +1,17 @@
-﻿  Grid.cpp
-  MeshRenderer.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\meshrenderer.cpp(46): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\meshrenderer.cpp(102): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\meshrenderer.cpp(143): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-  plyfile.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(193): warning C4101: 'elem': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(191): warning C4101: 'i': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(395): warning C4101: 'i': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(397): warning C4101: 'prop': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(517): warning C4101: 'i': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(737): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(1215): warning C4101: 'num_elems': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(1397): warning C4101: 'i': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(1470): warning C4101: 'i': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(1592): warning C4101: 'i': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(1736): warning C4101: 'j': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(1736): warning C4101: 'i': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(1924): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2107): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2108): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2112): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2113): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2189): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2190): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2195): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2196): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2314): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2394): warning C4101: 'count_type': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyfile.cpp(2393): warning C4101: 'prop_type': unreferenced local variable
-  PlyReader.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\plyreader.cpp(36): warning C4101: 'k': unreferenced local variable
-  RectilinearGrid.cpp
-  sampleUnstructuredGrid3D.cpp
-  ScalarAttributes.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\scalarattributes.cpp(11): warning C4018: '<': signed/unsigned mismatch
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\scalarattributes.cpp(20): warning C4018: '<': signed/unsigned mismatch
-  SimpleRenderer.cpp
-  OFF_PLYConverter.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(434): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(435): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(436): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(124): warning C4101: 'point': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(140): warning C4101: 'face': unreferenced local variable
-  StructuredGrid.cpp
-  UniformGrid.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\uniformgrid.cpp(31): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\uniformgrid.cpp(32): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  UnstructuredGrid.cpp
-  UnstructuredGrid3D.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\unstructuredgrid3d.cpp(50): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\unstructuredgrid3d.cpp(51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\unstructuredgrid3d.cpp(52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  zpr.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\zpr.cpp(97): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\zpr.cpp(120): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\zpr.cpp(136): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\zpr.cpp(310): warning C4101: 'k': unreferenced local variable
+﻿  OFF_PLYConverter.cpp
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(112): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(628): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(629): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(630): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(314): warning C4101: 'point': unreferenced local variable
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(330): warning C4101: 'face': unreferenced local variable
   Generating code
-  All 5736 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  3921 of 5921 functions (66.2%) were compiled, the rest were copied from previous compilation.
+    185 functions were new in current compilation
+    351 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   MR_Project.vcxproj -> C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Release\MR_Project.exe

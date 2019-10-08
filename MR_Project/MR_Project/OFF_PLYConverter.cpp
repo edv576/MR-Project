@@ -33,6 +33,47 @@ float OFF_PLYConverter::DistanceBetweenPoints(Point p1, Point p2) {
 	return distance;
 }
 
+float SignedVolumeOfTriangle(Point p1, Point p2, Point p3) {
+	float v321 = p3.x*p2.y*p1.z;
+	float v231 = p2.x*p3.y*p1.z;
+	float v312 = p3.x*p1.y*p2.z;
+	float v132 = p1.x*p3.y*p2.z;
+	float v213 = p2.x*p1.y*p3.z;
+	float v123 = p1.x*p2.y*p3.z;
+	return (1.0f / 6.0f)*(-v321 + v231 + v312 - v132 - v213 + v123);
+}
+
+float FullVolumeOfMesh(MatrixXi faces, MatrixXf vertices) {
+
+	Point dummyPoint1;
+	Point dummyPoint2;
+	Point dummyPoint3;
+
+	float fullVolume = 0;
+
+	for (int i = 0; i < faces.rows(); i++)
+	{
+		dummyPoint1.x = vertices(faces(i, 1), 0);
+		dummyPoint1.y = vertices(faces(i, 1), 1);
+		dummyPoint1.z = vertices(faces(i, 1), 2);
+
+		dummyPoint2.x = vertices(faces(i, 2), 0);
+		dummyPoint2.y = vertices(faces(i, 2), 1);
+		dummyPoint2.z = vertices(faces(i, 2), 2);
+
+		dummyPoint3.x = vertices(faces(i, 3), 0);
+		dummyPoint3.y = vertices(faces(i, 3), 1);
+		dummyPoint3.z = vertices(faces(i, 3), 2);
+
+		fullVolume += SignedVolumeOfTriangle(dummyPoint1, dummyPoint2, dummyPoint3);
+
+	}
+
+	return fullVolume;
+
+
+}
+
 template <typename T>
 MatrixXi Combination(const std::vector<T>& v, std::size_t count)
 {
@@ -187,7 +228,37 @@ float OFF_PLYConverter::CalculateDiameter()
 }
 
 
+float OFF_PLYConverter::CalculateCompactness(MatrixXi faces, MatrixXf vertices)
+{
+	float volume = FullVolumeOfMesh(faces, vertices);
+	float surfaceArea = SurfaceArea(&faces, &vertices);
 
+
+	return powf(surfaceArea, 3) / powf(volume, 2);
+
+}
+
+float OFF_PLYConverter::SurfaceArea(MatrixXi* faces, MatrixXf* vertices) {
+
+	//total area
+	float area = 0.0f;
+
+	for (int i = 0; i < faces->rows(); i++)
+	{
+		Vector4i face = faces->row(i);
+
+		//get the vertices of the face (triangle)
+		Vector3f a = vertices->row(face[1]);
+		Vector3f b = vertices->row(face[2]);
+		Vector3f c = vertices->row(face[3]);
+
+		//https://math.stackexchange.com/questions/128991/how-to-calculate-the-area-of-a-3d-triangle
+		//area of a triangle = cross(ab,ac).norm() / 2
+		area += (a - b).cross(a - c).norm() / 2;
+	}
+
+	return area;
+}
 
 
 void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
@@ -329,6 +400,10 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 			
 		}
+
+		centroid.x = 0;
+		centroid.y = 0;
+		centroid.z = 0;
 
 		//Applying PCA
 
@@ -584,6 +659,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		//CalculateHistogram_Bary_RandVert(200, 10);
 
 		float maxDistance = CalculateDiameter();
+		//float compactness = CalculateCompactness(allFaces, allPoints);
 
 		int t = 0;
 
