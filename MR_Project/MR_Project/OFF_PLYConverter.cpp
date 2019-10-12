@@ -565,61 +565,23 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		//Normalizing to size 1
 
 		float sizeX = maxX - minX;								//2. Compute a single scaling factor that best fits the grid
-		sizeX = (sizeX) ? 1 / sizeX : 1;							//   in the [-1,1] cube. Using a single factor for x,y, and z
+		sizeX = (sizeX) ? 1 / sizeX : 0.5;							//   in the [-1,1] cube. Using a single factor for x,y, and z
 		float sizeY = maxY - minY;								//   ensures that the object is scaled while keeping its
-		sizeY = (sizeY) ? 1 / sizeY : 1;							//   aspect ratio.
+		sizeY = (sizeY) ? 1 / sizeY : 0.5;							//   aspect ratio.
 		float sizeZ = maxZ - minZ;
-		sizeZ = (sizeZ) ? 1 / sizeZ : 1;
+		sizeZ = (sizeZ) ? 1 / sizeZ : 0.5;
 
 		float scale = min(sizeX, min(sizeY, sizeZ));
 
 		//Initializing the extreme points for normalization. Bounding box of length 1.
-		//Point extreme1;
-		//Point extreme2;
 
-		//extreme1.x = -0.5;
-		//extreme1.y = -0.5;
-		//extreme1.z = -0.5;
-
-		//extreme2.x = 0.5;
-		//extreme2.y = 0.5;
-		//extreme2.z = 0.5;
-
-
-
-		//extreme1.x = -ex;
-		//extreme1.y = -ex;
-		//extreme1.z = -ex;
-
-		//extreme2.x = ex;
-		//extreme2.y = ex;
-		//extreme2.z = ex;
-
-		//float minT;
-		//float scale;
-
-		////Getting the scale
-		//minT = std::min(1 / (maxX - minX), 1 / (maxY - minY));
-		//scale = std::min(minT, 1 / (maxZ - minZ));
 
 		for (int i = 0; i < nv; i++)
 		{
 
 			//itPoints = points.begin();
 			float xt, yt, zt;
-			//std::advance(itPoints, i);
 
-			////itPoints->x = 2.0*(itPoints->x - minX) / (maxX - minX) - 1.0;
-			////itPoints->y = 2.0*(itPoints->y - minY) / (maxY - minY) - 1.0;
-			////itPoints->z = 2.0*(itPoints->z - minZ) / (maxZ - minZ) - 1.0;
-
-			////Doing the scaling of the mesh. Its done keeping the aspect ratio
-			//itPoints->x = 2 * ((itPoints->x - minX)*scale - 0.5);
-			//itPoints->y = 2 * ((itPoints->y - minY)*scale - 0.5);
-			//itPoints->z = 2 * ((itPoints->z - minZ)*scale - 0.5);
-			////itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
-			////itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
-			////itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
 
 			xt = allPoints(i, 0);
 			yt = allPoints(i, 1);
@@ -628,9 +590,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			allPoints(i, 0) = 2 * ((allPoints(i, 0) - minX)*scale - 0.5);
 			allPoints(i, 1) = 2 * ((allPoints(i, 1) - minY)*scale - 0.5);
 			allPoints(i, 2) = 2 * ((allPoints(i, 2) - minZ)*scale - 0.5);
-			//itPoints->x = (itPoints->x - 0.5*(minX + maxX))*scale;
-			//itPoints->y = (itPoints->y - 0.5*(minY + maxY))*scale;
-			//itPoints->z = (itPoints->z - 0.5*(minZ + maxZ))*scale;
+
 
 			xt = allPoints(i, 0);
 			yt = allPoints(i, 1);

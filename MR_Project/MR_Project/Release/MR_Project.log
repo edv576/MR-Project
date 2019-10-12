@@ -4,14 +4,17 @@ c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverte
           [
               _Rep=std::chrono::system_clock::rep
           ]
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(628): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(629): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(630): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(568): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(570): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(572): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(590): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(591): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(592): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(314): warning C4101: 'point': unreferenced local variable
 c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(330): warning C4101: 'face': unreferenced local variable
   Generating code
-  3921 of 5921 functions (66.2%) were compiled, the rest were copied from previous compilation.
-    185 functions were new in current compilation
-    351 functions had inline decision re-evaluated but remain unchanged
+  2 of 5921 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   MR_Project.vcxproj -> C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Release\MR_Project.exe
