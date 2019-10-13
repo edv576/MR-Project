@@ -11,8 +11,13 @@
 #include <chrono>
 #include <cassert>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 
 using namespace Eigen;
+
+
 
 OFF_PLYConverter::OFF_PLYConverter() {
 
@@ -31,6 +36,77 @@ float OFF_PLYConverter::DistanceBetweenPoints(Point p1, Point p2) {
 		pow(p2.z - p1.z, 2));
 
 	return distance;
+
+	
+}
+
+Point Substract(Point p1, Point p2) {
+
+	Point substraction;
+
+	substraction.x = p1.x - p2.x;
+	substraction.y = p1.y - p2.y;
+	substraction.z = p1.z - p2.z;
+
+	return substraction;
+
+}
+
+float Determinant_3x3(Matrix3f m) {
+
+	return (m(0, 0) * (m(1, 1)*m(2, 2) - m(1, 2)*m(2, 1)) -
+		m(1, 0) * (m(0, 1)*m(2, 2) - m(0, 2)*m(2, 1)) +
+		m(2, 0) * (m(0, 1)*m(1, 2) - m(0, 2)*m(1, 1)));
+
+}
+
+void combinationUtil(int arr[], int n, int r,
+	int index, int data[], int i)
+{
+	// Current cobination is ready, print it  
+	if (index == r)
+	{
+		for (int j = 0; j < r; j++)
+			cout << data[j] << " ";
+		cout << endl;
+		return;
+	}
+
+	// When no more elements are there to put in data[]  
+	if (i >= n)
+		return;
+
+	// current is included, put next at next location  
+	data[index] = arr[i];
+	combinationUtil(arr, n, r, index + 1, data, i + 1);
+
+	// current is excluded, replace it with next (Note that  
+	// i+1 is passed, but index is not changed)  
+	combinationUtil(arr, n, r, index, data, i + 1);
+}
+
+float VolumeOfTetrahedron(Point p1, Point p2, Point p3, Point p4) {
+
+	Matrix3f matForDeterminant;
+
+	Point subs1 = Substract(p1, p2);
+	Point subs2 = Substract(p2, p3);
+	Point subs3 = Substract(p3, p4);
+
+	matForDeterminant(0, 0) = subs1.x;
+	matForDeterminant(0, 1) = subs1.y;
+	matForDeterminant(0, 2) = subs1.z;
+
+	matForDeterminant(1, 0) = subs2.x;
+	matForDeterminant(1, 1) = subs2.y;
+	matForDeterminant(1, 2) = subs2.z;
+
+	matForDeterminant(2, 0) = subs3.x;
+	matForDeterminant(2, 1) = subs3.y;
+	matForDeterminant(2, 2) = subs3.z;
+	
+	return(abs(Determinant_3x3(matForDeterminant))/6);
+
 }
 
 float SignedVolumeOfTriangle(Point p1, Point p2, Point p3) {
@@ -50,6 +126,8 @@ float FullVolumeOfMesh(MatrixXi faces, MatrixXf vertices) {
 	Point dummyPoint3;
 
 	float fullVolume = 0;
+
+	
 
 	for (int i = 0; i < faces.rows(); i++)
 	{
@@ -101,18 +179,18 @@ MatrixXi Combination(const std::vector<T>& v, std::size_t count)
 
 
 
-VectorXi OFF_PLYConverter::GetRandomIndexes(int size) {
+VectorXi OFF_PLYConverter::GetRandomIndexes(int first, int sizeSample, int sizePopulation) {
 
-	VectorXi randomIndexes(size);
+	VectorXi randomIndexes(sizeSample);
 	std::vector<int> numbers;
 
-	for (int i = 0; i < allPoints.rows(); i++)      
+	for (int i = first; i < sizePopulation; i++)      
 		numbers.push_back(i);
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(numbers.begin(), numbers.end(), std::default_random_engine(seed));
 
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < sizeSample; i++) {
 		randomIndexes(i) = numbers[i];
 	}
 
@@ -148,7 +226,7 @@ VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int 
 	VectorXi randomIndexes;
 	VectorXf sampleDistances(2);
 
-	randomIndexes = GetRandomIndexes(sampleSize);
+	randomIndexes = GetRandomIndexes(0, sampleSize, allPoints.rows());
 
 	dummyPoint.x = allPoints(randomIndexes(0), 0);
 	dummyPoint.y = allPoints(randomIndexes(0), 1);
@@ -183,11 +261,110 @@ VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int 
 	return featureVector;
 }
 
-//VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int numberBins)
-//{
-//
-//
-//}
+VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int numberBins)
+{
+	VectorXi randomIndexes;
+	Point dummyPoint1;
+	Point dummyPoint2;
+	VectorXf sampleDistances;
+	VectorXi featureVector;
+
+	randomIndexes = GetRandomIndexes(0, sampleSize, allPoints.rows());
+	int actualSizeSamples = 0;
+	int verticesXsample = 5;
+	int range = sampleSize - 1;
+
+	for (int i = 0; i < randomIndexes.rows(); i++) {
+		dummyPoint1.x = allPoints(randomIndexes(i), 0);
+		dummyPoint1.y = allPoints(randomIndexes(i), 1);
+		dummyPoint1.z = allPoints(randomIndexes(i), 2);
+
+		int j = 0;
+		int randomIndex2;
+		while (j < verticesXsample) {
+			randomIndex2 = rand() % (allPoints.rows());			
+			if (randomIndexes(i) != randomIndex2) {
+				dummyPoint2.x = allPoints(randomIndex2, 0);
+				dummyPoint2.y = allPoints(randomIndex2, 1);
+				dummyPoint2.z = allPoints(randomIndex2, 2);
+				sampleDistances(actualSizeSamples) = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
+				actualSizeSamples++;
+				j++;
+			}
+
+		}
+
+		//for (int j = 0; j < allPoints.rows(); j++)
+		//{
+		//	if (randomIndexes(i) != j) {
+		//		dummyPoint2.x = allPoints(j, 0);
+		//		dummyPoint2.y = allPoints(j, 1);
+		//		dummyPoint2.z = allPoints(j, 2);
+		//		sampleDistances(actualSizeSamples) = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
+		//		actualSizeSamples++;
+		//	}
+		//}
+	}
+
+	sampleDistances.resize(actualSizeSamples);
+
+	featureVector = GetFeatureVector(sampleDistances, 10, 0, 1*sqrt(3));
+
+	return featureVector;
+
+}
+
+VectorXi OFF_PLYConverter::CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins) {
+
+	VectorXi randomIndexes;
+	VectorXf sampleVolumes;
+	VectorXi featureVector;
+
+	randomIndexes = GetRandomIndexes(0, sampleSize*4, allPoints.rows());
+	int verticesXsample = 5;
+	Point dummyPoint1, dummyPoint2, dummyPoint3, dummyPoint4;
+	int actualVolumeSamples = 0;
+
+	for (int i = 0; i < sampleSize; i++) {
+		dummyPoint1.x = allPoints(randomIndexes(i), 0);
+		dummyPoint1.y = allPoints(randomIndexes(i), 1);
+		dummyPoint1.z = allPoints(randomIndexes(i), 2);
+		
+		VectorXi randomIndexes2 = GetRandomIndexes(sampleSize, verticesXsample, sampleSize * 2);
+
+		for (int j = 0; j < verticesXsample; j++) {
+			dummyPoint2.x = allPoints(randomIndexes2(j), 0);
+			dummyPoint2.y = allPoints(randomIndexes2(j), 1);
+			dummyPoint2.z = allPoints(randomIndexes2(j), 2);
+
+			VectorXi randomIndexes3 = GetRandomIndexes(sampleSize*2, verticesXsample, sampleSize * 3);
+
+			for (int k = 0; k < verticesXsample; k++) {
+				dummyPoint3.x = allPoints(randomIndexes3(k), 0);
+				dummyPoint3.y = allPoints(randomIndexes3(k), 1);
+				dummyPoint3.z = allPoints(randomIndexes3(k), 2);
+
+				VectorXi randomIndexes4 = GetRandomIndexes(sampleSize * 3, verticesXsample, sampleSize * 4);
+
+				for (int l = 0; l < verticesXsample; l++) {
+					dummyPoint4.x = allPoints(randomIndexes4(l), 0);
+					dummyPoint4.y = allPoints(randomIndexes4(l), 1);
+					dummyPoint4.z = allPoints(randomIndexes4(l), 2);
+
+					sampleVolumes(actualVolumeSamples) = VolumeOfTetrahedron(dummyPoint1, dummyPoint2, dummyPoint3, dummyPoint4);
+					actualVolumeSamples++;
+				}
+			}
+		}
+
+	}
+
+	sampleVolumes.resize(actualVolumeSamples);
+	featureVector = GetFeatureVector(sampleVolumes, 10, 0, 1);
+
+	return featureVector;
+
+}
 
 float OFF_PLYConverter::CalculateDiameter()
 {
@@ -234,7 +411,7 @@ float OFF_PLYConverter::CalculateCompactness(MatrixXi faces, MatrixXf vertices)
 	float surfaceArea = SurfaceArea(&faces, &vertices);
 
 
-	return powf(surfaceArea, 3) / powf(volume, 2);
+	return powf(surfaceArea, 3) / (36 * M_PI * powf(volume, 2));
 
 }
 
