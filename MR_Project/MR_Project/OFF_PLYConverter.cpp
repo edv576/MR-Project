@@ -147,7 +147,7 @@ float FullVolumeOfMesh(MatrixXi faces, MatrixXf vertices) {
 
 	}
 
-	return fullVolume;
+	return abs(fullVolume);
 
 
 }
@@ -254,7 +254,7 @@ VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int 
 	
 	}
 
-	featureVector = GetFeatureVector(sampleDistances, 10, 0, maxDistance);
+	featureVector = GetFeatureVector(sampleDistances, 10, 0, 1 * sqrt(3)/2);
 
 	
 
@@ -266,12 +266,13 @@ VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int num
 	VectorXi randomIndexes;
 	Point dummyPoint1;
 	Point dummyPoint2;
-	VectorXf sampleDistances;
+	int verticesXsample = 5;
+	VectorXf sampleDistances(sampleSize*verticesXsample);
 	VectorXi featureVector;
 
 	randomIndexes = GetRandomIndexes(0, sampleSize, allPoints.rows());
 	int actualSizeSamples = 0;
-	int verticesXsample = 5;
+	
 	int range = sampleSize - 1;
 
 	for (int i = 0; i < randomIndexes.rows(); i++) {
@@ -317,7 +318,7 @@ VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int num
 VectorXi OFF_PLYConverter::CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins) {
 
 	VectorXi randomIndexes;
-	VectorXf sampleVolumes;
+	VectorXf sampleVolumes(500000);
 	VectorXi featureVector;
 
 	randomIndexes = GetRandomIndexes(0, sampleSize*4, allPoints.rows());
@@ -739,18 +740,65 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			allPoints(i, 2) *= sign_FZ;
 		}
 
-		//Normalizing to size 1
+		////Normalizing to size 1
 
-		float sizeX = maxX - minX;								//2. Compute a single scaling factor that best fits the grid
-		sizeX = (sizeX) ? 1 / sizeX : 0.5;							//   in the [-1,1] cube. Using a single factor for x,y, and z
-		float sizeY = maxY - minY;								//   ensures that the object is scaled while keeping its
-		sizeY = (sizeY) ? 1 / sizeY : 0.5;							//   aspect ratio.
-		float sizeZ = maxZ - minZ;
-		sizeZ = (sizeZ) ? 1 / sizeZ : 0.5;
+		//float sizeX = maxX - minX;								//2. Compute a single scaling factor that best fits the grid
+		//sizeX = (sizeX) ? 1 / sizeX : 0.5;							//   in the [-1,1] cube. Using a single factor for x,y, and z
+		//float sizeY = maxY - minY;								//   ensures that the object is scaled while keeping its
+		//sizeY = (sizeY) ? 1 / sizeY : 0.5;							//   aspect ratio.
+		//float sizeZ = maxZ - minZ;
+		//sizeZ = (sizeZ) ? 1 / sizeZ : 0.5;
 
-		float scale = min(sizeX, min(sizeY, sizeZ));
+		//float scale = min(sizeX, min(sizeY, sizeZ));
 
-		//Initializing the extreme points for normalization. Bounding box of length 1.
+		////Initializing the extreme points for normalization. Bounding box of length 1.
+
+
+		//for (int i = 0; i < nv; i++)
+		//{
+
+		//	//itPoints = points.begin();
+		//	float xt, yt, zt;
+
+
+		//	xt = allPoints(i, 0);
+		//	yt = allPoints(i, 1);
+		//	zt = allPoints(i, 2);
+
+		//	allPoints(i, 0) = 2 * ((allPoints(i, 0) - minX)*scale - 0.5);
+		//	allPoints(i, 1) = 2 * ((allPoints(i, 1) - minY)*scale - 0.5);
+		//	allPoints(i, 2) = 2 * ((allPoints(i, 2) - minZ)*scale - 0.5);
+
+
+		//	xt = allPoints(i, 0);
+		//	yt = allPoints(i, 1);
+		//	zt = allPoints(i, 2);
+
+		//	//Writing the vertices values in the .ply file
+		//	fprintf(fd, "%f %f %f\n", xt, yt, zt);
+
+		//}
+
+		Vector3f A, B, A0, B0;
+
+		A(0) = -0.5;
+		A(1) = -0.5;
+		A(2) = -0.5;
+
+		B(0) = 0.5;
+		B(1) = 0.5;
+		B(2) = 0.5;
+
+		A0(0) = minX;
+		A0(1) = minY;
+		A0(2) = minZ;
+
+		B0(0) = maxX;
+		B0(1) = maxY;
+		B0(2) = maxZ;
+
+		float scale = min((B(0) - A(0)) / (B0(0) - A0(0)), min((B(1) - A(1)) / (B0(1) - A0(1)), (B(2) - A(2)) / (B0(2) - A0(2))));
+
 
 
 		for (int i = 0; i < nv; i++)
@@ -764,10 +812,9 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			yt = allPoints(i, 1);
 			zt = allPoints(i, 2);
 
-			allPoints(i, 0) = 2 * ((allPoints(i, 0) - minX)*scale - 0.5);
-			allPoints(i, 1) = 2 * ((allPoints(i, 1) - minY)*scale - 0.5);
-			allPoints(i, 2) = 2 * ((allPoints(i, 2) - minZ)*scale - 0.5);
-
+			allPoints(i, 0) = (allPoints(i, 0) - 0.5*(A0(0) + B0(0)))*scale + 0.5*(A(0) + B(0));
+			allPoints(i, 1) = (allPoints(i, 1) - 0.5*(A0(1) + B0(1)))*scale + 0.5*(A(1) + B(1));
+			allPoints(i, 2) = (allPoints(i, 2) - 0.5*(A0(2) + B0(2)))*scale + 0.5*(A(2) + B(2));
 
 			xt = allPoints(i, 0);
 			yt = allPoints(i, 1);
@@ -793,10 +840,14 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		VectorXi hist_Bary_RandVert;
 		hist_Bary_RandVert = CalculateHistogram_Bary_RandVert(200, 10);
 
+		VectorXi hist_2_RandVert = CalculateHistogram_2_RandVert(200, 10);
+
 		//CalculateHistogram_Bary_RandVert(200, 10);
 
+		VectorXi hist_Tetra_4_RandVert;
+
 		float maxDistance = CalculateDiameter();
-		//float compactness = CalculateCompactness(allFaces, allPoints);
+		float compactness = CalculateCompactness(allFaces, allPoints);
 
 		int t = 0;
 
