@@ -20,12 +20,94 @@ using namespace Eigen;
 
 
 OFF_PLYConverter::OFF_PLYConverter() {
+	numberRegionsShape = 64;
+	minMaxPoints.resize(6);
+	pointsPerRegion.resize(numberRegionsShape, 2);
 
-
+	for (int i = 0; i < numberRegionsShape; i++)
+	{
+		pointsPerRegion(i, 0) = i;
+		pointsPerRegion(i, 1) = 0;
+	}
 }
 
 OFF_PLYConverter::~OFF_PLYConverter() {
 
+
+}
+
+void OFF_PLYConverter::SetNumberRegionsShape(int sp) {
+	numberRegionsShape = sp * sp*sp;
+	singlePass = sp;
+}
+
+int OFF_PLYConverter::getNumberRegionsShape() {
+	return numberRegionsShape;
+}
+
+VectorXf OFF_PLYConverter::GetMinMaxPoints() {
+
+	float ex = 1.0e6;
+
+
+	float minX = ex;
+	float minY = ex;
+	float minZ = ex;
+	float maxX = -ex;
+	float maxY = -ex;
+	float maxZ = -ex;
+
+	for (int i = 0; i < allPoints.rows(); i++)
+	{
+		minX = min(allPoints(i, 0), minX);
+		minY = min(allPoints(i, 1), minY);
+		minZ = min(allPoints(i, 2), minZ);
+		maxX = max(allPoints(i, 0), maxX);
+		maxY = max(allPoints(i, 1), maxY);
+		maxZ = max(allPoints(i, 2), maxZ);
+	}
+
+	minMaxPoints(0) = minX;
+	minMaxPoints(1) = minY;
+	minMaxPoints(2) = minZ;
+	minMaxPoints(3) = maxX;
+	minMaxPoints(4) = maxY;
+	minMaxPoints(5) = maxZ;
+
+	return minMaxPoints;
+}
+
+MatrixXi OFF_PLYConverter::CalculatePointsPerRegion() {
+
+	float lengthX;
+	float lengthY;
+	float lengthZ;
+
+	lengthX = minMaxPoints(3) - minMaxPoints(0);
+	lengthY = minMaxPoints(4) - minMaxPoints(1);
+	lengthZ = minMaxPoints(5) - minMaxPoints(2);
+	bool found = false;
+
+	for (int i = 0; i < allPoints.rows(); i++) {
+		found = false;
+		for (int j = 0; j < singlePass && !found; j++) {
+			for (int k = 0; k < singlePass && !found; k++) {
+				for (int l = 0; l < singlePass && !found; l++) {
+					if ((allPoints(i, 0) >= minMaxPoints(0) + (lengthX / singlePass)*j) && (allPoints(i, 0) < minMaxPoints(0) + (lengthX / singlePass)*(j + 1))
+						&& (allPoints(i, 1) >= minMaxPoints(1) + (lengthY / singlePass)*k) && (allPoints(i, 1) < minMaxPoints(1) + (lengthY / singlePass)*(k + 1))
+						&& (allPoints(i, 2) >= minMaxPoints(2) + (lengthZ / singlePass)*l) && (allPoints(i, 2) < minMaxPoints(2) + (lengthZ / singlePass)*(l + 1))){
+						pointsPerRegion(l + k + j)++;
+						pointXRegion(i, 0) = i;
+						pointXRegion(i, 1) = l + k + j;
+						found = true;
+					}
+				}
+			}
+		}
+
+	}
+
+	return pointsPerRegion;
 
 }
 
@@ -208,7 +290,7 @@ VectorXi OFF_PLYConverter::GetFeatureVector(VectorXf samples, int numberBins, fl
 
 	for (int i = 0; i < samples.size(); i++) {
 		for (int j = 0; j < numberBins; j++) {
-			if ((samples(i) > j*binInterval) && (samples(i) <= (j + 1)*binInterval)) {
+			if ((samples(i) >= j*binInterval) && (samples(i) < (j + 1)*binInterval)) {
 				featureVector(j)++;
 			}
 		}
@@ -318,11 +400,12 @@ VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int num
 VectorXi OFF_PLYConverter::CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins) {
 
 	VectorXi randomIndexes;
-	VectorXf sampleVolumes(500000);
+	
 	VectorXi featureVector;
 
 	randomIndexes = GetRandomIndexes(0, sampleSize*4, allPoints.rows());
 	int verticesXsample = 5;
+	VectorXf sampleVolumes(sampleSize*verticesXsample*verticesXsample*verticesXsample);
 	Point dummyPoint1, dummyPoint2, dummyPoint3, dummyPoint4;
 	int actualVolumeSamples = 0;
 
@@ -361,7 +444,29 @@ VectorXi OFF_PLYConverter::CalculateHistogram_Tetra_4_RandVert(int sampleSize, i
 	}
 
 	sampleVolumes.resize(actualVolumeSamples);
-	featureVector = GetFeatureVector(sampleVolumes, 10, 0, 1);
+
+	Point p1, p2, p3, p4;
+
+	GetMinMaxPoints();
+
+	p1.x = minMaxPoints(0);
+	p1.y = minMaxPoints(1);
+	p1.z = minMaxPoints(2);
+
+	p2.x = minMaxPoints(3);
+	p2.y = minMaxPoints(4);
+	p2.z = minMaxPoints(5);
+
+	p3.x = p2.x;
+	p3.y = p1.y;
+	p3.z = p1.z;
+
+	p4.x = p1.x;
+	p4.y = p2.y;
+	p4.z = p1.z;
+
+
+	featureVector = GetFeatureVector(sampleVolumes, 10, 0, VolumeOfTetrahedron(p1, p2, p3, p4));
 
 	return featureVector;
 
@@ -837,19 +942,44 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			fprintf(fd, "%d %d %d %d\n", type_face_t, point1_t, point2_t, point3_t);
 		}
 
+		pointXRegion.resize(allPoints.rows(), 2);
+
 		VectorXi hist_Bary_RandVert;
 		hist_Bary_RandVert = CalculateHistogram_Bary_RandVert(200, 10);
 
 		VectorXi hist_2_RandVert = CalculateHistogram_2_RandVert(200, 10);
 
+		 
+
 		//CalculateHistogram_Bary_RandVert(200, 10);
 
-		VectorXi hist_Tetra_4_RandVert;
+		VectorXi hist_Tetra_4_RandVert = CalculateHistogram_Tetra_4_RandVert(50, 10);
 
 		float maxDistance = CalculateDiameter();
 		float compactness = CalculateCompactness(allFaces, allPoints);
 
 		int t = 0;
+
+		Point p1, p2, p3, p4;
+
+		p1.x = -0.5;
+		p1.y = -0.5;
+		p1.z = 0.5;
+
+		p2.x = -0.5;
+		p2.y = 0.5;
+		p2.z = 0.5;
+
+		p3.x = 0.5;
+		p3.y = 0.5;
+		p3.z = 0.5;
+
+		p4.x = -0.5;
+		p4.y = 0.5;
+		p4.z = -0.5;
+
+		float volumeTest = VolumeOfTetrahedron(p1, p2, p3, p4);
+	
 
 	}
 
