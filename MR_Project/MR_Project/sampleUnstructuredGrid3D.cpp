@@ -136,37 +136,37 @@ int main(int argc, char* argv[])							//Main program
 	cout << "      -space:      cycle through mesh rendering styles" << endl;
 
    OFF_PLYConverter *converter = new OFF_PLYConverter();
-   FILE *fo = fopen("DATA/m0.OFF", "r");
-   FILE *fd = fopen("DATA/m0.ply", "w");
+   FILE *fo = fopen("DATA/m101.OFF", "r");
+   FILE *fd = fopen("DATA/m101.ply", "w");
 
    converter->Convert_OFF_PLY(fo, fd);
 
    fclose(fo);
    fclose(fd);
 
-   const char* filename = (argc<2)? "DATA/m0.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
+   const char* filename = (argc<2)? "DATA/m101.ply" : argv[1];  //Read the PLY file given as 1st argument. If no arguments given, use a default file.
 
-	glutInit(&argc, argv);								//1.  Initialize the GLUT toolkit
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	//2.  Ask GLUT to create next windows with a RGB framebuffer and a Z-buffer too
-	glutInitWindowSize(500, 500);							//3.  Tell GLUT how large are the windows we want to create next
-	glutCreateWindow("6. 3D mesh (unstructured grid)");	//4.  Create our window
-	zprInit(0, 0, 0);										//5.  Initialize the viewpoint interaction-tool to look at the point (0,0,0)
-
-	PlyReader rdr;										//6.  Read a 3D mesh stored in a file in the PLY format
-	grid = rdr.read(filename);
-	grid->normalize();									//7.  Normalize the mesh in the [-1,1] cube. This makes setting the OpenGL projection easier.
-	grid->computeFaceNormals();							//8.  Compute face and vertex normals for the mesh. This allows us to shade the mesh next.
-	grid->computeVertexNormals();
-
-	glutMouseFunc(mouseclick);							//9.  Bind the mouse click and mouse drag (click-and-move) events to callbacks. This allows us
-	glutMotionFunc(mousemotion);							//    next to control the viewpoint interactively.
-	glutKeyboardFunc(keyboard);
-	glutDisplayFunc(draw);								//10. Add a drawing callback to the window	
-	glutReshapeFunc(viewing);							//11. Add a resize callback to the window
-	glutMainLoop();										//12. Start the event loop that displays the graph and handles window-resize events
-
-	return 0;
+   glutInit(&argc, argv);								//1.  Initialize the GLUT toolkit
+   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+														//2.  Ask GLUT to create next windows with a RGB framebuffer and a Z-buffer too
+   glutInitWindowSize(500,500);							//3.  Tell GLUT how large are the windows we want to create next
+   glutCreateWindow("6. 3D mesh (unstructured grid)");	//4.  Create our window
+   zprInit(0,0,0);										//5.  Initialize the viewpoint interaction-tool to look at the point (0,0,0)
+   
+   PlyReader rdr;										//6.  Read a 3D mesh stored in a file in the PLY format
+   grid = rdr.read(filename);
+   //grid->normalize();									//7.  Normalize the mesh in the [-1,1] cube. This makes setting the OpenGL projection easier.
+   grid->computeFaceNormals();							//8.  Compute face and vertex normals for the mesh. This allows us to shade the mesh next.
+   grid->computeVertexNormals();
+   
+   glutMouseFunc(mouseclick);							//9.  Bind the mouse click and mouse drag (click-and-move) events to callbacks. This allows us
+   glutMotionFunc(mousemotion);							//    next to control the viewpoint interactively.
+   glutKeyboardFunc(keyboard);
+   glutDisplayFunc(draw);								//10. Add a drawing callback to the window	
+   glutReshapeFunc(viewing);							//11. Add a resize callback to the window
+   glutMainLoop();										//12. Start the event loop that displays the graph and handles window-resize events
+   
+   return 0;
 }
 
 

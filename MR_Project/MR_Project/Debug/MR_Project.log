@@ -1,5 +1,15 @@
 ﻿  OFF_PLYConverter.cpp
-d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(167): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(168): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\gitsaves\mr-project\mr_project\mr_project\off_plyconverter.cpp(169): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  MR_Project.vcxproj -> D:\GitSaves\MR-Project\MR_Project\Debug\MR_Project.exe
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(272): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(339): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(394): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(520): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(920): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(921): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(922): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(597): warning C4101: 'point': unreferenced local variable
+c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(613): warning C4101: 'face': unreferenced local variable
+  MR_Project.vcxproj -> C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\MR_Project.exe

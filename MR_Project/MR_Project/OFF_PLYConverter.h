@@ -1,6 +1,8 @@
 #pragma once
+#include <Eigen/Dense>
 
 using namespace std;
+using namespace Eigen;
 
 //Struct representing a point in 3D
 struct Point
@@ -21,10 +23,40 @@ struct Face
 
 class OFF_PLYConverter {
 
+private:
+	MatrixXf allPoints;
+	MatrixXi allFaces;
+	Point centroid;
+	int numberRegionsShape;
+	int singlePass;
+	VectorXf minMaxPoints;
+	//Number of points per region
+	MatrixXi pointsPerRegion;
+	//Point and its corresponding region
+	MatrixXi pointXRegion;
+
 public:
 	OFF_PLYConverter();
 	~OFF_PLYConverter();
 
+	void SetNumberRegionsShape(int sp);
+	int getNumberRegionsShape();
 	void Convert_OFF_PLY(FILE *fo, FILE *fd);
+	VectorXi GetRandomIndexes(int first, int sizeSample, int sizePopulation);
+	VectorXi GetFeatureVector(VectorXf samples, int numberBins, float minValue, float maxValue);
+	float CalculateDiameter();
+	float CalculateCompactness(MatrixXi faces, MatrixXf vertices);
+	float SurfaceArea(MatrixXi* faces, MatrixXf* vertices);
+	float DistanceBetweenPoints(Point p1, Point p2);
+	VectorXi CalculateHistogram_Bary_RandVert(int sampleSize, int numberBins);
+	VectorXi CalculateHistogram_2_RandVert(int sampleSize, int numberBins);
+	VectorXi CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins);
+	VectorXf GetMinMaxPoints();
+	MatrixXi CalculatePointsPerRegion();
+
+	//VectorXi CalculateHistogram_2_RandVert(int sampleSize, int numberBins);
+	
+
+
 
 };
