@@ -1,15 +1,14 @@
-﻿  OFF_PLYConverter.cpp
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(272): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
-          with
-          [
-              _Rep=std::chrono::system_clock::rep
-          ]
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(339): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(394): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(520): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(920): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(921): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(922): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(597): warning C4101: 'point': unreferenced local variable
-c:\users\edgar\documents\github\mr-project\mr_project\mr_project\off_plyconverter.cpp(613): warning C4101: 'face': unreferenced local variable
+﻿  FileConverterMain.cpp
+zpr.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'zpr.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+UnstructuredGrid3D.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'UnstructuredGrid3D.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+UnstructuredGrid.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'UnstructuredGrid.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+UniformGrid.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'UniformGrid.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+StructuredGrid.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'StructuredGrid.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+SimpleRenderer.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'SimpleRenderer.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+ScalarAttributes.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'ScalarAttributes.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+RectilinearGrid.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'RectilinearGrid.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+PlyReader.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'PlyReader.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+plyfile.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'plyfile.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+MeshRenderer.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'MeshRenderer.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
+Grid.obj : warning LNK4099: PDB 'vc141.pdb' was not found with 'Grid.obj' or at 'C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\vc141.pdb'; linking object as if no debug info
   MR_Project.vcxproj -> C:\Users\edgar\Documents\GitHub\MR-Project\MR_Project\Debug\MR_Project.exe

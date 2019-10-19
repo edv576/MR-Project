@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileConverterMain.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="plyfile.cpp" />
