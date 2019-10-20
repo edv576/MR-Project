@@ -75,8 +75,14 @@ int main() {
 		float comp1 = converter1->CalculateCompactness();
 		float comp2 = converter2->CalculateCompactness();
 
-		VectorXi histogram_Bary_RandVert1 = converter1->CalculateHistogram_Bary_RandVert(1000, 10);
-		VectorXi histogram_Bary_RandVert2 = converter2->CalculateHistogram_Bary_RandVert(1000, 10);
+		VectorXf histogram_Bary_RandVert1 = converter1->CalculateHistogram_Bary_RandVert(5000, 10);
+		VectorXf histogram_Bary_RandVert2 = converter2->CalculateHistogram_Bary_RandVert(5000, 10);
+
+		VectorXf histogram_2_RandVert1 = converter1->CalculateHistogram_2_RandVert(300, 10);
+		VectorXf histogram_2_RandVert2 = converter2->CalculateHistogram_2_RandVert(300, 10);
+
+		VectorXf histogram_Tetra_4_RandVert1 = converter1->CalculateHistogram_Tetra_4_RandVert(1000, 10);
+		VectorXf histogram_Tetra_4_RandVert2 = converter2->CalculateHistogram_Tetra_4_RandVert(1000, 10);
 
 		//float comp1 = converter1->CalculateCompactness()
 
@@ -98,8 +104,47 @@ int main() {
 		printf((s2 + " - Compactness: ").data());
 		printf(std::to_string(comp2).data());
 
+		printf("\n");
+		printf((s1 + " - Histogram Random vertex/Barycenter: ").data());
+		for (int i = 0; i < histogram_Bary_RandVert1.rows(); i++) {			
+			printf("%.3f", histogram_Bary_RandVert1(i));
+			printf(" ");
+		}
 
+		printf("\n");
+		printf((s2 + " - Histogram Random vertex/Barycenter: ").data());
+		for (int i = 0; i < histogram_Bary_RandVert2.rows(); i++) {
+			printf("%.3f", histogram_Bary_RandVert2(i));
+			printf(" ");
+		}
 
+		printf("\n");
+		printf((s1 + " - Histogram 2 random vertices: ").data());
+		for (int i = 0; i < histogram_2_RandVert1.rows(); i++) {
+			printf("%.3f", histogram_2_RandVert1(i));
+			printf(" ");
+		}
+
+		printf("\n");
+		printf((s2 + " - Histogram 2 random vertices: ").data());
+		for (int i = 0; i < histogram_2_RandVert2.rows(); i++) {
+			printf("%.3f", histogram_2_RandVert2(i));
+			printf(" ");
+		}
+
+		printf("\n");
+		printf((s1 + " - Histogram Tetrahedron 4: ").data());
+		for (int i = 0; i < histogram_Tetra_4_RandVert1.rows(); i++) {
+			printf("%.3f", histogram_Tetra_4_RandVert1(i));
+			printf(" ");
+		}
+
+		printf("\n");
+		printf((s2 + " - Histogram Tetrahedron 4: ").data());
+		for (int i = 0; i < histogram_Tetra_4_RandVert2.rows(); i++) {
+			printf("%.3f", histogram_Tetra_4_RandVert2(i));
+			printf(" ");
+		}
 	}
 
 	getchar();

@@ -43,14 +43,14 @@ public:
 	int getNumberRegionsShape();
 	void Convert_OFF_PLY(FILE *fo, FILE *fd);
 	VectorXi GetRandomIndexes(int first, int sizeSample, int sizePopulation);
-	VectorXi GetFeatureVector(VectorXf samples, int numberBins, float minValue, float maxValue);
+	VectorXf GetFeatureVector(VectorXf samples, int numberBins, float minValue, float maxValue);
 	float CalculateDiameter();
 	float CalculateCompactness();
 	float SurfaceArea(MatrixXi* faces, MatrixXf* vertices);
 	float DistanceBetweenPoints(Point p1, Point p2);
-	VectorXi CalculateHistogram_Bary_RandVert(int sampleSize, int numberBins);
-	VectorXi CalculateHistogram_2_RandVert(int sampleSize, int numberBins);
-	VectorXi CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins);
+	VectorXf CalculateHistogram_Bary_RandVert(int sampleSize, int numberBins);
+	VectorXf CalculateHistogram_2_RandVert(int sampleSize, int numberBins);
+	VectorXf CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins);
 	VectorXf GetMinMaxPoints();
 	MatrixXi CalculatePointsPerRegion();
 	void Process_Post_Norm_PLY(FILE* fo, FILE* fd);

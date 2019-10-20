@@ -282,11 +282,11 @@ VectorXi OFF_PLYConverter::GetRandomIndexes(int first, int sizeSample, int sizeP
 
 }
 
-VectorXi OFF_PLYConverter::GetFeatureVector(VectorXf samples, int numberBins, float minValue, float maxValue) {
+VectorXf OFF_PLYConverter::GetFeatureVector(VectorXf samples, int numberBins, float minValue, float maxValue) {
 
 	float binInterval = (maxValue - minValue)/numberBins;
 
-	VectorXi featureVector(numberBins);
+	VectorXf featureVector(numberBins);
 	featureVector.setZero();
 
 	for (int i = 0; i < samples.size(); i++) {
@@ -299,7 +299,7 @@ VectorXi OFF_PLYConverter::GetFeatureVector(VectorXf samples, int numberBins, fl
 
 	//Normalizing feature vector
 
-	int totalFeatureVector = 0;
+	float totalFeatureVector = 0;
 
 	for (int i = 0; i < numberBins; i++) {
 		totalFeatureVector += featureVector(i);
@@ -314,7 +314,7 @@ VectorXi OFF_PLYConverter::GetFeatureVector(VectorXf samples, int numberBins, fl
 
 }
 
-VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int numberBins) {
+VectorXf OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int numberBins) {
 
 	float maxDistance;
 	Point dummyPoint;
@@ -331,7 +331,7 @@ VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int 
 
 
 	sampleDistances.resize(sampleSize);
-	VectorXi featureVector;
+	VectorXf featureVector;
 
 	
 
@@ -349,21 +349,23 @@ VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int 
 	
 	}
 
-	featureVector = GetFeatureVector(sampleDistances, 10, 0, maxDistance);
+	featureVector = GetFeatureVector(sampleDistances, 10, 0, 0.5 * sqrt(3));
 
 	
 
 	return featureVector;
 }
 
-VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int numberBins)
+VectorXf OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int numberBins)
 {
 	VectorXi randomIndexes;
 	Point dummyPoint1;
 	Point dummyPoint2;
 	int verticesXsample = 5;
-	VectorXf sampleDistances(sampleSize*verticesXsample);
-	VectorXi featureVector;
+	//VectorXf sampleDistances(sampleSize*verticesXsample);
+	VectorXf sampleDistances((allPoints.rows() - 1) * sampleSize);
+	VectorXf featureVector;
+	
 
 	randomIndexes = GetRandomIndexes(0, sampleSize, allPoints.rows());
 	int actualSizeSamples = 0;
@@ -375,31 +377,33 @@ VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int num
 		dummyPoint1.y = allPoints(randomIndexes(i), 1);
 		dummyPoint1.z = allPoints(randomIndexes(i), 2);
 
-		int j = 0;
-		int randomIndex2;
-		while (j < verticesXsample) {
-			randomIndex2 = rand() % (allPoints.rows());			
-			if (randomIndexes(i) != randomIndex2) {
-				dummyPoint2.x = allPoints(randomIndex2, 0);
-				dummyPoint2.y = allPoints(randomIndex2, 1);
-				dummyPoint2.z = allPoints(randomIndex2, 2);
-				sampleDistances(actualSizeSamples) = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
-				actualSizeSamples++;
-				j++;
-			}
+		//int j = 0;
+		//int randomIndex2;
 
-		}
 
-		//for (int j = 0; j < allPoints.rows(); j++)
-		//{
-		//	if (randomIndexes(i) != j) {
-		//		dummyPoint2.x = allPoints(j, 0);
-		//		dummyPoint2.y = allPoints(j, 1);
-		//		dummyPoint2.z = allPoints(j, 2);
+		//while (j < verticesXsample) {
+		//	randomIndex2 = rand() % (allPoints.rows());			
+		//	if (randomIndexes(i) != randomIndex2) {
+		//		dummyPoint2.x = allPoints(randomIndex2, 0);
+		//		dummyPoint2.y = allPoints(randomIndex2, 1);
+		//		dummyPoint2.z = allPoints(randomIndex2, 2);
 		//		sampleDistances(actualSizeSamples) = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
 		//		actualSizeSamples++;
+		//		j++;
 		//	}
+
 		//}
+
+		for (int j = 0; j < allPoints.rows(); j++)
+		{
+			if (randomIndexes(i) != j) {
+				dummyPoint2.x = allPoints(j, 0);
+				dummyPoint2.y = allPoints(j, 1);
+				dummyPoint2.z = allPoints(j, 2);
+				sampleDistances(actualSizeSamples) = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
+				actualSizeSamples++;
+			}
+		}
 	}
 
 	sampleDistances.resize(actualSizeSamples);
@@ -410,26 +414,71 @@ VectorXi OFF_PLYConverter::CalculateHistogram_2_RandVert(int sampleSize, int num
 
 }
 
-VectorXi OFF_PLYConverter::CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins) {
+VectorXf OFF_PLYConverter::CalculateHistogram_Tetra_4_RandVert(int sampleSize, int numberBins) {
 
 	VectorXi randomIndexes;
 	
-	VectorXi featureVector;
+	VectorXf featureVector;
 
 	randomIndexes = GetRandomIndexes(0, sampleSize*4, allPoints.rows());
-	int verticesXsample = 5;
+	//int verticesXsample = 50;
+	int verticesXsample = allPoints.rows();
 	VectorXf sampleVolumes(sampleSize*verticesXsample*verticesXsample*verticesXsample);
 	Point dummyPoint1, dummyPoint2, dummyPoint3, dummyPoint4;
 	int actualVolumeSamples = 0;
+	int dummyIndex1, dummyIndex2, dummyIndex3;
 
 	for (int i = 0; i < sampleSize; i++) {
 		dummyPoint1.x = allPoints(randomIndexes(i), 0);
 		dummyPoint1.y = allPoints(randomIndexes(i), 1);
 		dummyPoint1.z = allPoints(randomIndexes(i), 2);
 		
+		/*for (int j = 0; j < allPoints.rows(); j++)
+		{
+			if (randomIndexes(i) != j) {
+				dummyPoint2.x = allPoints(j, 0);
+				dummyPoint2.y = allPoints(j, 1);
+				dummyPoint2.z = allPoints(j, 2);
+
+				for (int k = 0; k < allPoints.rows(); k++)
+				{
+					if (randomIndexes(i) != k && j != k) {
+						dummyPoint3.x = allPoints(k, 0);
+						dummyPoint3.y = allPoints(k, 1);
+						dummyPoint3.z = allPoints(k, 2);
+
+						for (int k = 0; k < allPoints.rows(); k++)
+						{
+							if (randomIndexes(i) != k && j != k) {
+								dummyPoint3.x = allPoints(k, 0);
+								dummyPoint3.y = allPoints(k, 1);
+								dummyPoint3.z = allPoints(k, 2);
+
+
+
+							}
+						}
+
+					}
+				}
+
+
+				
+			}
+		}*/
+
+
+
+
+
+		//sampleVolumes(actualVolumeSamples) = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
+		//actualVolumeSamples++;
+
 		VectorXi randomIndexes2 = GetRandomIndexes(sampleSize, verticesXsample, sampleSize * 2);
 
 		for (int j = 0; j < verticesXsample; j++) {
+
+
 			dummyPoint2.x = allPoints(randomIndexes2(j), 0);
 			dummyPoint2.y = allPoints(randomIndexes2(j), 1);
 			dummyPoint2.z = allPoints(randomIndexes2(j), 2);
@@ -1387,16 +1436,16 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 		pointXRegion.resize(allPoints.rows(), 2);
 
-		VectorXi hist_Bary_RandVert;
-		hist_Bary_RandVert = CalculateHistogram_Bary_RandVert(200, 10);
+		//VectorXf hist_Bary_RandVert;
+		//hist_Bary_RandVert = CalculateHistogram_Bary_RandVert(200, 10);
 
-		VectorXi hist_2_RandVert = CalculateHistogram_2_RandVert(200, 10);
+		//VectorXf hist_2_RandVert = CalculateHistogram_2_RandVert(200, 10);
 
-		 
+		// 
 
-		//CalculateHistogram_Bary_RandVert(200, 10);
+		////CalculateHistogram_Bary_RandVert(200, 10);
 
-		VectorXi hist_Tetra_4_RandVert = CalculateHistogram_Tetra_4_RandVert(50, 10);
+		//VectorXf hist_Tetra_4_RandVert = CalculateHistogram_Tetra_4_RandVert(50, 10);
 
 		float maxDistance = CalculateDiameter();
 		float compactness = CalculateCompactness();
