@@ -51,14 +51,53 @@ int main() {
 	}
 	else
 	{
-		string s = "DATA4/3.ply";
+		string s1 = "DATA4/1.ply";
 
-		char const* c = s.data();
-		FILE* f = fopen(c, "r");
+		char const* c1 = s1.data();
+		FILE* f1 = fopen(c1, "r");
 
-		OFF_PLYConverter* converter = new OFF_PLYConverter();
+		OFF_PLYConverter* converter1 = new OFF_PLYConverter();
 
-		converter->Read_PLY_File(f);
+		converter1->Read_PLY_File(f1);
+
+		string s2 = "DATA4/2.ply";
+
+		char const* c2 = s2.data();
+		FILE* f2 = fopen(c2, "r");
+
+		OFF_PLYConverter* converter2 = new OFF_PLYConverter();
+
+		converter2->Read_PLY_File(f2);
+
+		float d1 = converter1->CalculateDiameter();
+		float d2 = converter2->CalculateDiameter();
+
+		float comp1 = converter1->CalculateCompactness();
+		float comp2 = converter2->CalculateCompactness();
+
+		VectorXi histogram_Bary_RandVert1 = converter1->CalculateHistogram_Bary_RandVert(1000, 10);
+		VectorXi histogram_Bary_RandVert2 = converter2->CalculateHistogram_Bary_RandVert(1000, 10);
+
+		//float comp1 = converter1->CalculateCompactness()
+
+		printf((s1+ " - Diameter: ").data());
+		printf(std::to_string(d1).data());
+
+		printf("\n");
+
+		printf((s2 + " - Diameter: ").data());
+		printf(std::to_string(d2).data());
+
+		printf("\n");
+
+		printf((s1 + " - Compactness: ").data());
+		printf(std::to_string(comp1).data());
+
+		printf("\n");
+
+		printf((s2 + " - Compactness: ").data());
+		printf(std::to_string(comp2).data());
+
 
 
 	}

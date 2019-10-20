@@ -45,7 +45,7 @@ public:
 	VectorXi GetRandomIndexes(int first, int sizeSample, int sizePopulation);
 	VectorXi GetFeatureVector(VectorXf samples, int numberBins, float minValue, float maxValue);
 	float CalculateDiameter();
-	float CalculateCompactness(MatrixXi faces, MatrixXf vertices);
+	float CalculateCompactness();
 	float SurfaceArea(MatrixXi* faces, MatrixXf* vertices);
 	float DistanceBetweenPoints(Point p1, Point p2);
 	VectorXi CalculateHistogram_Bary_RandVert(int sampleSize, int numberBins);

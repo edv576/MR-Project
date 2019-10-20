@@ -297,6 +297,18 @@ VectorXi OFF_PLYConverter::GetFeatureVector(VectorXf samples, int numberBins, fl
 		}
 	}
 
+	//Normalizing feature vector
+
+	int totalFeatureVector = 0;
+
+	for (int i = 0; i < numberBins; i++) {
+		totalFeatureVector += featureVector(i);
+	}
+
+	for (int i = 0; i < numberBins; i++) {
+		featureVector(i) /= totalFeatureVector;
+	}
+
 	return featureVector;
 
 
@@ -337,7 +349,7 @@ VectorXi OFF_PLYConverter::CalculateHistogram_Bary_RandVert(int sampleSize, int 
 	
 	}
 
-	featureVector = GetFeatureVector(sampleDistances, 10, 0, 1 * sqrt(3)/2);
+	featureVector = GetFeatureVector(sampleDistances, 10, 0, maxDistance);
 
 	
 
@@ -512,10 +524,10 @@ float OFF_PLYConverter::CalculateDiameter()
 }
 
 
-float OFF_PLYConverter::CalculateCompactness(MatrixXi faces, MatrixXf vertices)
+float OFF_PLYConverter::CalculateCompactness()
 {
-	float volume = FullVolumeOfMesh(faces, vertices);
-	float surfaceArea = SurfaceArea(&faces, &vertices);
+	float volume = FullVolumeOfMesh(allFaces, allPoints);
+	float surfaceArea = SurfaceArea(&allFaces, &allPoints);
 
 
 	return powf(surfaceArea, 3) / (36 * M_PI * powf(volume, 2));
@@ -1387,7 +1399,7 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		VectorXi hist_Tetra_4_RandVert = CalculateHistogram_Tetra_4_RandVert(50, 10);
 
 		float maxDistance = CalculateDiameter();
-		float compactness = CalculateCompactness(allFaces, allPoints);
+		float compactness = CalculateCompactness();
 
 		int t = 0;
 
