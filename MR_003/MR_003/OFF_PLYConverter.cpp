@@ -676,22 +676,50 @@ void OFF_PLYConverter::Process_Post_Norm_PLY(FILE* fo, FILE* fd)
 	float maxX, maxY, maxZ;
 
 	fscanf(fo, "%100s\n", buffer);
+	string bufferString = std::string(buffer);
 
-	if (strcmp(buffer, "ply")) {
+	//if (strcmp(buffer, "ply") || strcmp(buffer, "OFF")) {
+
+	bool r1 = bufferString.find("ply");
+	bool r2 = bufferString.find("OFF");
+
+	
+
+	if (bufferString.find("ply") == string::npos && bufferString.find("OFF") == string::npos) {
 
 		return;
 	}
 	else
 	{
-		fgets(buffer, 100, fo);
-		fgets(buffer, 100, fo);
-		fscanf(fo, "%100s %100s %d\n", buffer1, buffer2, &nv);
-		fgets(buffer, 100, fo);
-		fgets(buffer, 100, fo);
-		fgets(buffer, 100, fo);
-		fscanf(fo, "%100s %100s %d\n", buffer1, buffer2, &nf);
-		fgets(buffer, 100, fo);
-		fgets(buffer, 100, fo);
+		
+
+		if (bufferString.find("ply") != string::npos) {
+			fgets(buffer, 100, fo);
+			fgets(buffer, 100, fo);
+			fscanf(fo, "%100s %100s %d\n", buffer1, buffer2, &nv);
+			fgets(buffer, 100, fo);
+			fgets(buffer, 100, fo);
+			fgets(buffer, 100, fo);
+			fscanf(fo, "%100s %100s %d\n", buffer1, buffer2, &nf);
+			fgets(buffer, 100, fo);
+			fgets(buffer, 100, fo);
+
+		}
+		else
+		{
+			fscanf(fo, "%d %d %d", &nv, &nf, &ne);
+		}
+
+
+		//fgets(buffer, 100, fo);
+		//fgets(buffer, 100, fo);
+		//fscanf(fo, "%100s %100s %d\n", buffer1, buffer2, &nv);
+		//fgets(buffer, 100, fo);
+		//fgets(buffer, 100, fo);
+		//fgets(buffer, 100, fo);
+		//fscanf(fo, "%100s %100s %d\n", buffer1, buffer2, &nf);
+		//fgets(buffer, 100, fo);
+		//fgets(buffer, 100, fo);
 
 		allPoints.resize(nv, 3);
 		allFaces.resize(nf, 4);

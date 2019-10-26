@@ -1,4 +1,4 @@
-﻿  Main.cpp
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (MR_003.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   OFF_PLYConverter.cpp
 C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(273,16): warning C4244:  'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
 C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(273,16): warning C4244:         with
@@ -6,30 +6,33 @@ C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(27
 C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(273,16): warning C4244:             _Rep=std::chrono::system_clock::rep
 C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(273,16): warning C4244:         ]
 C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(324,64): warning C4244:  'argument': conversion from 'Eigen::Index' to 'int', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(368,64): warning C4244:  'argument': conversion from 'Eigen::Index' to 'int', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(407,60): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(419,66): warning C4244:  'argument': conversion from 'Eigen::Index' to 'int', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(533,30): warning C4244:  'return': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(583,20): warning C4101:  'minZ': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(583,14): warning C4101:  'minY': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(585,14): warning C4101:  'maxY': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(585,8): warning C4101:  'maxX': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(569,6): warning C4101:  'ne': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(583,8): warning C4101:  'minX': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(581,8): warning C4101:  'correction': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(585,20): warning C4101:  'maxZ': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(610,10): warning C4101:  'point': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(624,9): warning C4101:  'face': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(960,72): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(961,72): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(962,72): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(650,6): warning C4101:  'ne': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(691,10): warning C4101:  'point': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(705,9): warning C4101:  'face': unreferenced local variable
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1363,68): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1364,68): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1365,68): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1040,10): warning C4101:  'point': unreferenced local variable
-  Generating Code...
-C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1056,9): warning C4101:  'face': unreferenced local variable
-  MR_003.vcxproj -> C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\x64\Debug\MR_003.exe
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(352,63): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(370,64): warning C4244:  'argument': conversion from 'Eigen::Index' to 'int', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(411,60): warning C4244:  'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(423,66): warning C4244:  'argument': conversion from 'Eigen::Index' to 'int', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(425,22): warning C4244:  'initializing': conversion from 'Eigen::Index' to 'int', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(429,19): warning C4101:  'dummyIndex2': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(429,6): warning C4101:  'dummyIndex1': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(429,32): warning C4101:  'dummyIndex3': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(543,30): warning C4244:  'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(593,20): warning C4101:  'minZ': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(593,14): warning C4101:  'minY': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(595,14): warning C4101:  'maxY': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(595,8): warning C4101:  'maxX': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(579,6): warning C4101:  'ne': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(593,8): warning C4101:  'minX': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(591,8): warning C4101:  'correction': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(595,20): warning C4101:  'maxZ': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(620,10): warning C4101:  'point': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(634,9): warning C4101:  'face': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(998,72): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(999,72): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1000,72): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(729,10): warning C4101:  'point': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(743,9): warning C4101:  'face': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1360,68): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1361,68): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1362,68): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1079,10): warning C4101:  'point': unreferenced local variable
+C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\MR_003\OFF_PLYConverter.cpp(1095,9): warning C4101:  'face': unreferenced local variable
+  MR_003.vcxproj -> C:\Users\edgar\Documents\GitHub\MR-Project\MR_003\x64\Debug\MRConverter.exe
