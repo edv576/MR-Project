@@ -433,46 +433,7 @@ VectorXf OFF_PLYConverter::CalculateHistogram_Tetra_4_RandVert(int sampleSize, i
 		dummyPoint1.y = allPoints(randomIndexes(i), 1);
 		dummyPoint1.z = allPoints(randomIndexes(i), 2);
 		
-		/*for (int j = 0; j < allPoints.rows(); j++)
-		{
-			if (randomIndexes(i) != j) {
-				dummyPoint2.x = allPoints(j, 0);
-				dummyPoint2.y = allPoints(j, 1);
-				dummyPoint2.z = allPoints(j, 2);
-
-				for (int k = 0; k < allPoints.rows(); k++)
-				{
-					if (randomIndexes(i) != k && j != k) {
-						dummyPoint3.x = allPoints(k, 0);
-						dummyPoint3.y = allPoints(k, 1);
-						dummyPoint3.z = allPoints(k, 2);
-
-						for (int k = 0; k < allPoints.rows(); k++)
-						{
-							if (randomIndexes(i) != k && j != k) {
-								dummyPoint3.x = allPoints(k, 0);
-								dummyPoint3.y = allPoints(k, 1);
-								dummyPoint3.z = allPoints(k, 2);
-
-
-
-							}
-						}
-
-					}
-				}
-
-
-				
-			}
-		}*/
-
-
-
-
-
-		//sampleVolumes(actualVolumeSamples) = DistanceBetweenPoints(dummyPoint1, dummyPoint2);
-		//actualVolumeSamples++;
+		
 
 		VectorXi randomIndexes2 = GetRandomIndexes(sampleSize, verticesXsample, sampleSize * 2);
 
@@ -1036,6 +997,7 @@ void OFF_PLYConverter::Process_Post_Norm_PLY(FILE* fo, FILE* fd)
 }
 
 
+
 void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 
 	char buffer[101];
@@ -1142,12 +1104,6 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 		float ex = 1.0e6;
 
 		//Getting the first values for the minimum and maximum values
-		//minX = itPoints->x;
-		//minY = itPoints->y;
-		//minZ = itPoints->z;
-		//maxX = itPoints->x;
-		//maxY = itPoints->y;
-		//maxZ = itPoints->z;
 
 		minX = ex;
 		minY = ex;
@@ -1337,44 +1293,8 @@ void OFF_PLYConverter::Convert_OFF_PLY(FILE *fo, FILE *fd){
 			allPoints(i, 2) *= sign_FZ;
 		}
 
-		////Normalizing to size 1
+		//Normalizing to size 1
 
-		//float sizeX = maxX - minX;								//2. Compute a single scaling factor that best fits the grid
-		//sizeX = (sizeX) ? 1 / sizeX : 0.5;							//   in the [-1,1] cube. Using a single factor for x,y, and z
-		//float sizeY = maxY - minY;								//   ensures that the object is scaled while keeping its
-		//sizeY = (sizeY) ? 1 / sizeY : 0.5;							//   aspect ratio.
-		//float sizeZ = maxZ - minZ;
-		//sizeZ = (sizeZ) ? 1 / sizeZ : 0.5;
-
-		//float scale = min(sizeX, min(sizeY, sizeZ));
-
-		////Initializing the extreme points for normalization. Bounding box of length 1.
-
-
-		//for (int i = 0; i < nv; i++)
-		//{
-
-		//	//itPoints = points.begin();
-		//	float xt, yt, zt;
-
-
-		//	xt = allPoints(i, 0);
-		//	yt = allPoints(i, 1);
-		//	zt = allPoints(i, 2);
-
-		//	allPoints(i, 0) = 2 * ((allPoints(i, 0) - minX)*scale - 0.5);
-		//	allPoints(i, 1) = 2 * ((allPoints(i, 1) - minY)*scale - 0.5);
-		//	allPoints(i, 2) = 2 * ((allPoints(i, 2) - minZ)*scale - 0.5);
-
-
-		//	xt = allPoints(i, 0);
-		//	yt = allPoints(i, 1);
-		//	zt = allPoints(i, 2);
-
-		//	//Writing the vertices values in the .ply file
-		//	fprintf(fd, "%f %f %f\n", xt, yt, zt);
-
-		//}
 
 		Vector3f A, B, A0, B0;
 

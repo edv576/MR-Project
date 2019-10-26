@@ -23,6 +23,7 @@
     <ProjectGuid>{0E0BC6BE-BDD1-4A2A-8B52-29655B212F56}</ProjectGuid>
     <RootNamespace>MR003</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>MRConverter</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
